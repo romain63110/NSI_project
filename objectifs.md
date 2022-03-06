@@ -13,6 +13,7 @@
 - [ ] faire de vrais graphismes (genre un joli pixel art)
 - [ ] ajouter du sfx
 - [ ] ajouter de la narration
+- [ ] faire des cinématiques
 - [ ] ajouter des musiques
 - [ ] ajouter le support d'une manette xbox
 - [ ] multi non local
