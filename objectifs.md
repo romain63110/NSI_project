@@ -6,9 +6,13 @@
 - [ ] ennemi avec un minimum de brain + mort
 - [ ] obstacle
 - [ ] map
+- [ ] **DU LOOT**
 - [ ] rogue-lite (generation aléatoire des parcelles de map + positions des ennemis)
-- [ ] ajouter des éléments niveau gameplay
+- [ ] ajouter des éléments niveau gameplay (platformes,jumps...)
 - [ ] multi local
 - [ ] faire de vrais graphismes (genre un joli pixel art)
+- [ ] ajouter du sfx
 - [ ] ajouter de la narration
-- [ ] ajouter le support 
+- [ ] ajouter des musiques
+- [ ] ajouter le support d'une manette xbox
+- [ ] multi non local
