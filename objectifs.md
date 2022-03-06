@@ -8,6 +8,8 @@
 - [ ] map
 - [ ] **DU LOOT**
 - [ ] rogue-lite (generation aléatoire des parcelles de map + positions des ennemis)
+- [ ] des bonus permanents /non permanents
+- [ ] arbre de compétence
 - [ ] ajouter des éléments niveau gameplay (platformes,jumps...)
 - [ ] multi local
 - [ ] faire de vrais graphismes (genre un joli pixel art)
