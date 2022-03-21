@@ -1,0 +1,24 @@
+body{background-color: yellow;}
+.corps{
+    animation: rgbPowerPlus 5s infinite linear ;
+}
+@keyframes rgbPowerPlus{
+    0%{background-color: rgb(0, 100%, 50%);}
+    12.5%{background-color: rgb(232, 255, 128);}
+    25%{background-color: hsl(0, 100%, 50%);}
+    37.5%{background-color: hsl(320, 100%, 50%);}
+    50%{background-color: hsl(286, 100%, 50%);}
+    62.5%{background-color: hsl(249, 100%, 50%);}
+    75%{background-color: hsl(199, 100%, 50%);}
+    82.5%{background-color: hsl(170, 100%, 50%);}
+    100%{background-color: hsl(106, 100%, 50%);}
+    82.5%{background-color: hsl(170, 100%, 50%);}
+    75%{background-color: hsl(199, 100%, 50%);}
+    62.5%{background-color: hsl(249, 100%, 50%);}
+    50%{background-color: hsl(286, 100%, 50%);}
+    37.5%{background-color: hsl(320, 100%, 50%);}
+    25%{background-color: hsl(0, 100%, 50%);}
+    12.5%{background-color: rgb(232, 255, 128);}
+    0%{background-color: rgb(0, 100%, 50%);}
+
+}
