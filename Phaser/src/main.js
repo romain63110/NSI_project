@@ -32,8 +32,7 @@ let cursors
 
 function preload() {
   //to zoom
-  this.game.canvas.style.width = (this.game.config.width * this.game.config.zoom).toString() + 'px';
-  this.game.canvas.style.height = (this.game.config.height * this.game.config.zoom).toString() + 'px';
+  this.cameras.main.setZoom(this.game.config.zoom);
 
   // Runs once, loads up assets like images and audio
   this.load.image("tiles-png", "src/assets/images/tiles.png");
@@ -65,6 +64,8 @@ function create() {
 
   player = this.physics.add.sprite(16, 16,"player");
   player.body.setSize(16,16);
+                                          
+  this.cameras.main.startFollow(player,true,1,0.05);//(player,arround position,x,y) x,y -> +near 1 +the camera followed
 
   worldLayer.setCollisionBetween(12, 34);
   worldLayer.setCollisionBetween(38, 45);
