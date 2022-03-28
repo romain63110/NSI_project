@@ -17,7 +17,7 @@ const config = {
     // Fit to window
     mode: Phaser.Scale.RESIZE,
     // Center vertically and horizontally
-    autoCenter: Phaser.Scale.CENTER_BOTH,
+    //autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   scene: {
     preload: preload,
