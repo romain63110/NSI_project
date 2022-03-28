@@ -5,3 +5,5 @@ Idées pour le monde :
 - le(s) perso(s) commence(nt) dans les bas niveaux de la ville mal famés et doit s'élever socialement à cout de guns et katana
 - hero design comme un ninja avec comme arme de base un katana
 - méchants design comme des sortes de bandits cagoulés et le boss genre comme le patron de la mafia (costume blanc, chapeau blanc)-> mais futuriste
+- arbre de compétence permanent partagé entre les deux instances du joueur, avec plusieurs spécialisations (lames, modifications corporelles (compétences de déplacements), armes à feu)
+- loot à trouver au cours de la run: sabres, armes de corps à corps avec différentes variations sur les stats ; pistolets, fusils, lance roquettes ; items cooldown : heal, grenades, pièges ; mods d'armes pour changer le tir secondaire/l'élémentr
