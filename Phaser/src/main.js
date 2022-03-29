@@ -29,7 +29,6 @@ const config = {
 const game = new Phaser.Game(config);
 
 let cursors
-let pad1
 
 function preload() {
   //to zoom
