@@ -29,7 +29,6 @@ const config = {
 const game = new Phaser.Game(config);
 
 let cursors;
-let pad1;
 
 function preload() {
   //to zoom
@@ -44,8 +43,6 @@ function preload() {
   this.load.image("platform", "src/assets/images/platform2.png");
   //surveillance des touches clavier
   cursors = this.input.keyboard.createCursorKeys();
-  //tentative de support de manette XBOX
-  pad1 = game.input.gamepad.pad1;
 }
 
 function create() {
