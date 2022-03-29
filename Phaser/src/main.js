@@ -101,4 +101,4 @@ function update(time, delta) {
  
     //player.play('jump', true);
   }
-}
+
