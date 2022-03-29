@@ -95,23 +95,10 @@ function update(time, delta) {
   player.setVelocityX(0);
 
   // Horizontal movement
-  if (
-    cursors.left.isDown ||
-    pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) ||
-    pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1
-  ) {
-    player.body.setVelocityX(-speed_x);
-  } else if (
-    cursors.right.isDown ||
-    pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_RIGHT) ||
-    pad1.axis(Phaser.Gamepad.XBOX360_STICK_RIGHT_X) > 0.1
-  ) {
-    player.body.setVelocityX(speed_x);
-  }
+  
 
   // Vertical movement
-  if (cursors.up.isDown && player.body.onFloor()) {
-    player.setVelocityY(-speed_y);
+ 
     //player.play('jump', true);
   }
 }
