@@ -1,1 +1,0 @@
-let jeCreeUneVarDansLeVide = 0;
