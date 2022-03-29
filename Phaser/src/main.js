@@ -11,6 +11,9 @@ const config = {
       gravity: { y: 100 }
     }
   },
+  input: {
+    gamepad: true
+  },
   zoom: 5, // Since we're working with 16x16 pixel tiles, let's scale up the canvas by 3x
   pixelArt: true,
   scale: {
@@ -28,8 +31,13 @@ const config = {
 
 const game = new Phaser.Game(config);
 
+<<<<<<< HEAD
 let cursors
 
+=======
+let cursors;
+var gamepad;
+>>>>>>> 61e6d31865b277803311274958ee3310cbde0ccc
 
 function preload() {
   //to zoom
@@ -86,9 +94,19 @@ function create() {
 
 function update(time, delta) {
   // Runs once per frame for the duration of the scene
+
   //speed
   speed_x = 50
   speed_y = 100 //jump
+
+  /*//gamepad
+  if (this.input.gamepad.gamepads[0] !== undefined && gamepad === undefined){
+    gamepad = this.input.gamepad.gamepads[0];//get only the first controller
+
+    gamepad.on('down', function (gamepad, button, value) {
+      console.log(value)
+    });
+  }*/
   
   // // Stop any previous movement from the last frame
   player.setVelocityX(0);
