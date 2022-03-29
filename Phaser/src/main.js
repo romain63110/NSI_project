@@ -28,8 +28,8 @@ const config = {
 
 const game = new Phaser.Game(config);
 
-let cursors;
-let pad1;
+let cursors
+let pad1
 
 function preload() {
   //to zoom
@@ -63,9 +63,6 @@ function create() {
   const tiles = map.addTilesetImage("tiles-png");
   const worldLayer = map.createLayer(0, tiles, 0, 0);
 
-  game.input.gamepad.start();
-  pad1 = game.input.gamepad.pad1;
-
   player = this.physics.add.sprite(16, 16,"player");
   player.body.setSize(16,16);
                                           
@@ -97,7 +94,7 @@ function update(time, delta) {
   player.setVelocityX(0);
 
   // Horizontal movement
-  if (cursors.left.isDown || pad1.isDown(Phaser.Gamepad.XBOX360_DPAD_LEFT) || (pad1.axis(Phaser.Gamepad.XBOX360_STICK_LEFT_X) < -0.1)) {
+  if (cursors.left.isDown) {
     player.body.setVelocityX(-speed_x);
   } else if (cursors.right.isDown) {
     player.body.setVelocityX(speed_x);
