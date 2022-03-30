@@ -13,7 +13,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 function preload() {
-    this.load.image('greenSquare', 'assets/testSprite.png');
+    this.load.spritesheet('greenSquare', 'assets/testSprite.png', { frameWidth: 32, frameHeight: 32 });
 }
 
 function create() {
