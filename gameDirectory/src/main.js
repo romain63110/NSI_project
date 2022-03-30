@@ -5,8 +5,7 @@ let config = {
     backgroundColor: "AA9900", // Ouais on s'en fout mais si jamais le bgColor se met dans la config et pas dans le create()
     scene: {
         preload: preload,
-        create: create,
-        update: update
+        create: create
     }
 };
 
@@ -18,8 +17,4 @@ function preload() {
 
 function create() {
     this.add.image(0, 0, 'greenSquare');
-}
-
-function update() {
-
 }

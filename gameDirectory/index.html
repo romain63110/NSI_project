@@ -1,11 +1,31 @@
 <!DOCTYPE html>
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <title>Document</title>
-            <script src="phaser.js"></script>
-            <script src="gameDirectory/src/main.js"></script>
-        </head>
-        <body>
-        </body>
-    </html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <script src="phaser.js"></script>
+    <script>
+    let config = {
+        type: Phaser.AUTO,
+        width: 1280,
+        height: 720,
+        backgroundColor: "AA9900", // Ouais on s'en fout mais si jamais le bgColor se met dans la config et pas dans le create()
+        scene: {
+        preload: preload,
+        create: create,
+        },
+    };
+
+    let game = new Phaser.Game(config);
+
+    function preload() {
+        this.load.image("greenSquare", "assets/testSprite.png");
+    }
+
+    function create() {
+        this.add.image(0, 0, "greenSquare");
+    }
+    </script>
+  </head>
+  <body></body>
+</html>
