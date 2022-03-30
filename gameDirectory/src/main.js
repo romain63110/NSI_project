@@ -21,5 +21,5 @@ function create() {
 }
 
 function update() {
-    alert("bug dans la matrice")
+
 }
