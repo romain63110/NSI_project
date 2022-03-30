@@ -12,11 +12,11 @@ var config = {
 var game = new Phaser.Game(config);
 
 function preload() {
-    this.load.spritesheet('greenSquare', 'assets/testSprite.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.image('greenSquare', 'assets/testSprite.png');
 }
 
 function create() {
-    this.add.spritesheet(400, 300, 'greenSquare');
+    this.add.image(0, 0, 'greenSquare');
 }
 
 /*function update() {
