@@ -43,10 +43,10 @@ function update() {
     }
 
     if(dKey.isDown) {
-        pacman.setVelocity(100, 20);
+        pacman.setVelocity(100, 0);
     }
 
     if(qKey.isDown) {
-        pacman.setVelocity(-100, 20);
+        pacman.setVelocity(-100, 0);
     }
 }
