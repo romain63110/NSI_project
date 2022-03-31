@@ -1,28 +1,52 @@
-let config = {
+const config = {
+    width: 1280,
+    height: 720,
     type: Phaser.AUTO,
-    // width: 1280,
-    // height: 720,
-    backgroundColor: "AA9900", // Ouais on s'en fout mais si jamais le bgColor se met dans la config et pas dans le create()
+    backgroundColor: '#121212',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: {y: 200}
+        }
+    },
     scene: {
         preload: preload,
         create: create,
         update: update
-    },
-    scale: {
-        mode: Phaser.Scale.RESIZE,
-    },
+    }
 };
 
 let game = new Phaser.Game(config);
+let pacman; // oui je sais c'est pas un pacman l'image et aussi c'est tout petit mais je m'en fous
+let spaceBar;
+let qKey;
+let dKey;
 
 function preload() {
-    this.load.image('greenSquare', 'assets/testSprite.png');
+    this.load.image('pacman', 'pacman.png');
 }
 
 function create() {
-    this.add.image(50, 100, 'greenSquare');
+    pacman = this.physics.add.sprite(150, 150, 'pacman');
+    pacman.body.collideWorldBounds = true;
+
+    spaceBar = this.input.keyboard.addKey('SPACE');
+    qKey = this.input.keyboard.addKey('Q');
+    dKey = this.input.keyboard.addKey('D');
 }
 
-function update(time, delta) {
-    
+function update() {
+    pacman.setVelocityX(0);
+
+    if(spaceBar.isDown) {
+        pacman.setVelocity(0, -200);
+    }
+
+    if(dKey.isDown) {
+        pacman.setVelocity(100, 20);
+    }
+
+    if(qKey.isDown) {
+        pacman.setVelocity(-100, 20);
+    }
 }
