@@ -1,12 +1,16 @@
 let config = {
     type: Phaser.AUTO,
-    width: 1280,
-    height: 720,
+    // width: 1280,
+    // height: 720,
     backgroundColor: "AA9900", // Ouais on s'en fout mais si jamais le bgColor se met dans la config et pas dans le create()
     scene: {
         preload: preload,
-        create: create
-    }
+        create: create,
+        update: update
+    },
+    scale: {
+        mode: Phaser.Scale.RESIZE,
+    },
 };
 
 let game = new Phaser.Game(config);
@@ -16,5 +20,9 @@ function preload() {
 }
 
 function create() {
-    this.add.image(0, 0, 'greenSquare');
+    this.add.image(50, 100, 'greenSquare');
+}
+
+function update(time, delta) {
+    
 }
