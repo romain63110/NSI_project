@@ -47,7 +47,8 @@ function preload() {
 }
 function create(){
     //add background                      position   image    origin->position   scale
-    const backgroundImage = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(0.5, 0.5);
+    this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(0.5, 0.5);
+    this.background_1.setScrollFactor(0.5)//Compared to the camera//parallax
 
     //add player                         position    image
     this.player = this.physics.add.sprite(50, 300, 'player');
@@ -69,7 +70,7 @@ function create(){
     this.physics.add.collider(this.player, platforms);
     //Camera
     this.cameras.main.startFollow(this.player,true,1,0.05);//(player,arround position,x,y)
-
+    console.log(this)
 }
 function update(){
     //speed
