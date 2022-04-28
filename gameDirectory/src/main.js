@@ -30,6 +30,9 @@ function preload() {
     //to zoom
     this.cameras.main.setZoom(this.game.config.zoom);
 
+    //keyboard
+    keyboard = this.input.keyboard.createCursorKeys()
+
     //load background image
     this.load.image('background', './src/assets/images/background.jpg');
 
@@ -50,20 +53,40 @@ function create(){
     this.player = this.physics.add.sprite(50, 300, 'player');
 
     //add map
+    //                              key of tilemapTiledJSON
     const map = this.make.tilemap({ key: 'map' });
+    //                                  key of tile image
     const tileset = map.addTilesetImage('tiles');
 
-    const platforms = map.createLayer('platform', tileset, 0, 200);//layer platform
-    map.createLayer('creeper', tileset, 0, 200);                   //layer creeper
+    const platforms = map.createLayer('platform', tileset, 0, 200);//layer: platform
+    map.createLayer('creeper', tileset, 0, 200);                   //layer: creeper
 
     // adds colision to tiles 1
     platforms.setCollision(1); 
 
 
-                                           //tiles where colision is true
+    //                                     tiles where colision is true
     this.physics.add.collider(this.player, platforms);
+    //Camera
+    this.cameras.main.startFollow(this.player,true,1,0.05);//(player,arround position,x,y)
 
 }
 function update(){
+    //speed
+    speed_x = 50
+    speed_y = 100 //jump
 
+    // Horizontal movement
+    this.player.setVelocityX(0);// stop any previous movement from the last frame
+    if (keyboard.left.isDown) {
+        this.player.body.setVelocityX(-speed_x);
+    } else if (keyboard.right.isDown) {
+        this.player.body.setVelocityX(speed_x);
+    }
+
+    // Vertical movement
+    if ((keyboard.up.isDown) && this.player.body.onFloor()) {
+        this.player.setVelocityY(-speed_y);
+        //player.play('jump', true);
+    }
 }
