@@ -1,12 +1,12 @@
 const config = {
-    width: 1280,
-    height: 720,
+    width: innerWidth,
+    height: innerHeight,
     type: Phaser.AUTO,
     backgroundColor: '#121212',
     physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: {y: 200}
+        default: 'matter',
+        matter: {
+            gravity: {y: 1}
         }
     },
     scene: {
@@ -23,12 +23,12 @@ let qKey;
 let dKey;
 
 function preload() {
-    this.load.image('pacman', 'pacman.png');
+    this.load.image('pacman', 'assets/pacman.png');
 }
 
 function create() {
-    pacman = this.physics.add.sprite(150, 150, 'pacman');
-    pacman.body.collideWorldBounds = true;
+    this.matter.world.setBounds(0, 0, config.width, config.height)
+    pacman = this.matter.add.sprite(150, 150, 'pacman');
 
     spaceBar = this.input.keyboard.addKey('SPACE');
     qKey = this.input.keyboard.addKey('Q');
@@ -38,15 +38,19 @@ function create() {
 function update() {
     pacman.setVelocityX(0);
 
+    if(spaceBar.isDown && dKey.isDown) {
+        pacman.setVelocity(5, -5)
+    }
+
     if(spaceBar.isDown) {
-        pacman.setVelocity(0, -200);
+        pacman.setVelocity(0, -5);
     }
 
     if(dKey.isDown) {
-        pacman.setVelocity(100, 0);
+        pacman.setVelocity(5, 0);
     }
 
     if(qKey.isDown) {
-        pacman.setVelocity(-100, 0);
+        pacman.setVelocity(-5, 0);
     }
 }
