@@ -10,7 +10,7 @@ const config = {
     input: {
         gamepad: true
     },
-    zoom: 1,
+    zoom: 5,
     pixelArt: true,
     scale: {
         mode: Phaser.Scale.RESIZE,
@@ -34,36 +34,37 @@ function preload() {
     keyboard = this.input.keyboard.createCursorKeys()
 
     //load background image
-    this.load.image('background', './src/assets/images/background.jpg');
+    this.load.image('background', './src/assets/images/background.png');
 
     //load player with JSON(to animate)
     this.load.image('player', './src/assets/images/player.png');
 
     // load tiles(image)
-    this.load.image('tiles', './src/assets/tiles/images/tiles.png');
+    this.load.image('tiles', './src/assets/tiles/tiles.png');
     // load tiles(JSON export)
-    this.load.tilemapTiledJSON('map', './src/assets/tiles/json/tilemap.json'); // tmj ~= json
+    this.load.tilemapTiledJSON('map', './src/assets/tiles/tilemap.json'); // tmj ~= json
 
 }
 function create(){
     //add background                      position   image    origin->position   scale
-    this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(0.5, 0.5);
+    this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(2, 2);
     this.background_1.setScrollFactor(0.5)//Compared to the camera//parallax
 
     //add player                         position    image
-    this.player = this.physics.add.sprite(50, 300, 'player');
+    this.player = this.physics.add.sprite(70, 300, 'player');
+    this.player.setScale(0.2)
 
     //add map
     //                              key of tilemapTiledJSON
     const map = this.make.tilemap({ key: 'map' });
     //                                  key of tile image
-    const tileset = map.addTilesetImage('tiles');
+    const tileset = map.addTilesetImage('tileimage',"tiles",16,16,0,0);
 
-    const platforms = map.createLayer('platform', tileset, 0, 200);//layer: platform
-    map.createLayer('creeper', tileset, 0, 200);                   //layer: creeper
+    const platforms = map.createLayer('platforms', tileset, 0, 200);//layer: platform
+    //map.createLayer('creeper', tileset, 0, 200);                   //layer: creeper
 
     // adds colision to tiles 1
-    platforms.setCollision(1); 
+    platforms.setCollision([0,1,2,3,4,5,6,7,8,285,57,58,59]); 
 
 
     //                                     tiles where colision is true
