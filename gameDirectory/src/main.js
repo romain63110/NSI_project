@@ -37,8 +37,7 @@ function preload() {
     this.load.image('background', './src/assets/images/background.png');
 
     //load player with JSON(to animate)
-    this.load.spritesheet('player', './src/assets/images/testSprite.png', 32, 32, 6);
-
+    this.load.spritesheet('player', './src/assets/images/testSprite.png', { frameWidth: 32, frameHeight: 32 });
     // load tiles(image)
     this.load.image('tiles', './src/assets/tiles/tiles.png');
     // load tiles(JSON export)
