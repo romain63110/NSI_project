@@ -37,7 +37,7 @@ function preload() {
     this.load.image('background', './src/assets/images/background.png');
 
     //load player with JSON(to animate)
-    this.load.image('player', './src/assets/images/player.png');
+    this.load.spritesheet('player', './src/assets/images/testSprite.png', 32, 32, 6);
 
     // load tiles(image)
     this.load.image('tiles', './src/assets/tiles/tiles.png');
@@ -52,7 +52,7 @@ function create(){
 
     //add player                         position    image
     this.player = this.physics.add.sprite(70, 300, 'player');
-    this.player.setScale(0.2)
+    this.player.setScale(1)
 
     //add map
     //                              key of tilemapTiledJSON
