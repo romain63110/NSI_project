@@ -52,6 +52,15 @@ function create(){
     //add player                         position    image
     this.player = this.physics.add.sprite(70, 300, 'player');
     this.player.setScale(1)
+    // player anim test
+    this.anims.create({
+        key: 'idle',
+        frames: this.anims.generateFrameNumbers('player', { frames: [ 0, 1, 2, 3, 4, 5, ] }),
+        frameRate: 12,
+        repeat: -1
+    });
+    this.player.play('idle');
+
 
     //add map
     //                              key of tilemapTiledJSON
@@ -76,7 +85,7 @@ function update(){
     //speed
     speed_x = 50
     speed_y = 100 //jump
-
+    
     // Horizontal movement
     this.player.setVelocityX(0);// stop any previous movement from the last frame
     if (keyboard.left.isDown) {
