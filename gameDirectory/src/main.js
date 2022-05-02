@@ -36,22 +36,22 @@ function preload() {
     //load background image
     this.load.image('background', './src/assets/images/background.png');
 
-    //load player with JSON(to animate)
+    //load player with spritesheet
     this.load.spritesheet('player', './src/assets/images/testSprite.png', { frameWidth: 32, frameHeight: 32 });
     // load tiles(image)
     this.load.image('tiles', './src/assets/tiles/tiles.png');
-    // load tiles(JSON export)
+    // load tiles
     this.load.tilemapTiledJSON('map', './src/assets/tiles/tilemap.json'); // tmj ~= json
 
 }
 function create(){
-    //add background                      position   image    origin->position   scale
+    //add background                      position   image    origin   scale
     this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(2, 2);
     this.background_1.setScrollFactor(0.5)//Compared to the camera//parallax
 
     //add player                         position    image
     this.player = this.physics.add.sprite(70, 300, 'player');
-    this.player.setScale(1)
+    this.player.setScale(0.5)
     // player anim test
     this.anims.create({
         key: 'idle',
