@@ -1,6 +1,6 @@
-const config = {
-    type: Phaser.AUTO,
-    physics: {
+const config = { // configuration du phaser avec les propriétés de bases de phaser
+    type: Phaser.AUTO, //moteur de rendu (WebGL par défaut, Canvas si incompatible avec un vieux navigateur comme internet explorer)
+    physics: { // physiques pour simuler une gravité
         default: 'arcade',
         arcade: {
         debug: true,
@@ -8,95 +8,95 @@ const config = {
         }
     },
     input: {
-        gamepad: true
+        gamepad: true // fonctionalité à venir : prise en charge de manette
     },
     zoom: 5,
-    pixelArt: true,
+    pixelArt: true, //retire l'anti aliasing pour éviter un effet de flou sur le pixel art
     scale: {
-        mode: Phaser.Scale.RESIZE,
+        mode: Phaser.Scale.RESIZE, // fenetre adaptive
     },
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
+    scene: { // trois fonctions principales de phaser :   
+        preload: preload,// préchargement (une fois au chargement de la page, utilisé pour charger des images et autres ressources),
+        create: create, //instanciations dans le code, appelée une fois apres preload()
+        update: update //et réactualisation (utilisé pour la surveillance des touches), appelée en boucle
     }
 }
 
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(config); //création du jeu
 
-let keyboard;
+let keyboard; // déclaration de variable, destinée à recevoir les inputs du clavier
 
 function preload() {
-    //to zoom
-    this.cameras.main.setZoom(this.game.config.zoom);
+    //zoom
+    this.cameras.main.setZoom(this.game.config.zoom); //niveau de zoom de la caméra 
 
-    //keyboard
+    //surveillance des touches
     keyboard = this.input.keyboard.createCursorKeys()
 
-    //load background image
+    //chargement de l'arrière plan
     this.load.image('background', './src/assets/images/background.png');
 
-    //load player with spritesheet
+    //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
     this.load.spritesheet('player', './src/assets/images/testSprite.png', { frameWidth: 32, frameHeight: 32 });
-    // load tiles(image)
+    //chargement des pixels art de tuiles
     this.load.image('tiles', './src/assets/tiles/tiles.png');
-    // load tiles
-    this.load.tilemapTiledJSON('map', './src/assets/tiles/tilemap.json'); // tmj ~= json
+    //chargement de la carte de tuile réalisée via Tiled
+    this.load.tilemapTiledJSON('map', './src/assets/tiles/tilemap.json'); 
 
 }
 function create(){
-    //add background                      position   image    origin   scale
+    //ajout de l'arrière plan          position   image    origine         taille
     this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(2, 2);
-    this.background_1.setScrollFactor(0.5)//Compared to the camera//parallax
+    this.background_1.setScrollFactor(0.5)//valeur comparée avec la caméra pour le parallaxe
 
-    //add player                         position    image
+    //création du joueur                  position | clé de l'image
     this.player = this.physics.add.sprite(70, 300, 'player');
-    this.player.setScale(0.5)
-    // player anim test
+    this.player.setScale(0.5) //taille du joueur
+    // animation du joueur
     this.anims.create({
-        key: 'idle',
-        frames: this.anims.generateFrameNumbers('player', { frames: [ 0, 1, 2, 3, 4, 5, ] }),
-        frameRate: 12,
-        repeat: -1
+        key: 'idle', 
+        frames: this.anims.generateFrameNumbers('player', { frames: [ 0, 1, 2, 3, 4, 5, ] }),//frames animées
+        frameRate: 12, // douze images par seconde
+        repeat: -1 //infini
     });
-    this.player.play('idle');
+    this.player.play('idle'); //on joue l'aniamtion
 
 
-    //add map
-    //                              key of tilemapTiledJSON
+    //ajout de la map
+    //                              clé de la tilemap
     const map = this.make.tilemap({ key: 'map' });
-    //                                  key of tile image
-    const tileset = map.addTilesetImage('tileimage',"tiles",16,16,0,0);
+    //                                  clé de l'image avec les tiles
+    const tileset = map.addTilesetImage('tileimage',"tiles",16,16,0,0); //définition du tileset utilisé
 
-    const platforms = map.createLayer('platforms', tileset, 0, 200);//layer: platform
-    //map.createLayer('creeper', tileset, 0, 200);                   //layer: creeper
+    const platforms = map.createLayer('platforms', tileset, 0, 200);//plan des platformes
+    
 
-    // adds colision to tiles 1
-    platforms.setCollision([0,1,2,3,4,5,6,7,8,285,57,58,59]); 
-
-
-    //                                     tiles where colision is true
+    // ajouter de la collision aux plateformes:
+    platforms.setCollision([1,2,3,285,57,58,59]); 
     this.physics.add.collider(this.player, platforms);
-    //Camera
-    this.cameras.main.startFollow(this.player,true,1,0.05);//(player,arround position,x,y)
-    console.log(this)
+
+    //Camera centrée sur le personnage
+    this.cameras.main.startFollow(this.player,true,1,0.05);
+
+    console.log(this) //affichage du debug avec la hitbox et l'accélération
 }
 function update(){
-    //speed
+    //variable vitesse
     speed_x = 50
-    speed_y = 100 //jump
+    //variable saut
+    speed_y = 100 
     
-    // Horizontal movement
-    this.player.setVelocityX(0);// stop any previous movement from the last frame
+    // Mouvement Horizontal
+    this.player.setVelocityX(0);// arrête le mouvement de la frame précédente
     if (keyboard.left.isDown) {
         this.player.body.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown) {
         this.player.body.setVelocityX(speed_x);
     }
 
-    // Vertical movement
+    // Mouvement vertical
     if ((keyboard.up.isDown) && this.player.body.onFloor()) {
         this.player.setVelocityY(-speed_y);
-        //player.play('jump', true);
+        //this.player.play('jump', true); /*animation de saut pas encore implémentée*/
     }
 }
