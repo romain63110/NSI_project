@@ -4,7 +4,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         default: 'arcade',
         arcade: {
         debug: true,
-        gravity: { y: 100 }
+        gravity: { y: 150 }
         }
     },
     input: {
@@ -41,16 +41,21 @@ function preload() {
     //chargement des pixels art de tuiles
     this.load.image('tiles', './src/assets/tiles/tiles.png');
     //chargement de la carte de tuile réalisée via Tiled
-    this.load.tilemapTiledJSON('map', './src/assets/tiles/tilemap.json'); 
+    this.load.tilemapTiledJSON('map', './src/assets/tiles/tilemap.json');
+    //chargement de la musique
+    //this.music = game.add.audio('music_file');
 
 }
 function create(){
+    //lancement de la musique
+    //this.music.play();
+
     //ajout de l'arrière plan          position   image    origine         taille
     this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(2, 2);
     this.background_1.setScrollFactor(0.5)//valeur comparée avec la caméra pour le parallaxe
 
     //création du joueur                  position | clé de l'image
-    this.player = this.physics.add.sprite(70, 300, 'player');
+    this.player = this.physics.add.sprite(100, 300, 'player');
     this.player.setScale(0.5) //taille du joueur
     // animation du joueur
     this.anims.create({
@@ -82,12 +87,18 @@ function create(){
 }
 function update(){
     //variable vitesse
-    speed_x = 50
+    if(this.player.body.onFloor()){
+        speed_x = 50
+    }else{
+        speed_x = 50
+    }
     //variable saut
     speed_y = 100 
     
     // Mouvement Horizontal
-    this.player.setVelocityX(0);// arrête le mouvement de la frame précédente
+    if(this.player.body.onFloor()){
+        this.player.setVelocityX(0);// arrête le mouvement de la frame précédente
+    }
     if (keyboard.left.isDown) {
         this.player.body.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown) {
