@@ -1,10 +1,11 @@
 const config = { // configuration du phaser avec les propriétés de bases de phaser
     type: Phaser.AUTO, //moteur de rendu (WebGL par défaut, Canvas si incompatible avec un vieux navigateur comme internet explorer)
     physics: { // physiques pour simuler une gravité
-        default: 'arcade',
-        arcade: {
+        default: 'matter',
+        matter: {
         debug: true,
-        gravity: { y: 150 }
+        gravity: { y: 1 },
+        enableSleep: true,
         }
     },
     input: {
@@ -55,7 +56,7 @@ function create(){
     this.background_1.setScrollFactor(0.5)//valeur comparée avec la caméra pour le parallaxe
 
     //création du joueur                  position | clé de l'image
-    this.player = this.physics.add.sprite(100, 300, 'player');
+    this.player = this.matter.add.sprite(100, 300, 'player');
     this.player.setScale(0.5) //taille du joueur
     // animation du joueur
     this.anims.create({
@@ -73,12 +74,12 @@ function create(){
     //                                  clé de l'image avec les tiles
     const tileset = map.addTilesetImage('tileimage',"tiles",16,16,0,0); //définition du tileset utilisé
 
-    const platforms = map.createLayer('platforms', tileset, 0, 200);//plan des platformes
+    const platforms = map.createLayer('platforms', tileset);//plan des platformes
     
 
     // ajouter de la collision aux plateformes:
     platforms.setCollision([1,2,3,285,57,58,59]); 
-    this.physics.add.collider(this.player, platforms);
+    this.matter.add.collider(this.player, platforms);
 
     //Camera centrée sur le personnage
     this.cameras.main.startFollow(this.player,true,1,0.05);
