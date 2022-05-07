@@ -100,6 +100,8 @@ function update(){
     //variable vitesse
     if(this.player.body.onFloor()){
         speed_x = 50
+    }else{
+        speed_x = 50
     }
     //variable saut
     speed_y = 100 
