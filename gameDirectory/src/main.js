@@ -4,13 +4,13 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         default: 'arcade',
         arcade: {
         debug: true,
-        gravity: { y: 150 }
+        gravity: { y: 100 }
         }
     },
     input: {
         gamepad: true // fonctionalité à venir : prise en charge de manette
     },
-    zoom: 5,
+    //zoom: 4,
     pixelArt: true, //retire l'anti aliasing pour éviter un effet de flou sur le pixel art
     scale: {
         mode: Phaser.Scale.RESIZE, // fenetre adaptive
@@ -39,9 +39,10 @@ function preload() {
     //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
     this.load.spritesheet('player', './src/assets/images/testSprite.png', { frameWidth: 32, frameHeight: 32 });
     //chargement des pixels art de tuiles
-    this.load.image('tiles', './src/assets/tiles/tiles.png');
+    this.load.image('tilesPng', './src/assets/tiles/tilesimage1.png');
     //chargement de la carte de tuile réalisée via Tiled
-    this.load.tilemapTiledJSON('map', './src/assets/tiles/tilemap.json');
+    this.load.tilemapTiledJSON('map1', './src/assets/tiles/tilemap1.json');
+    this.load.tilemapTiledJSON('map2', './src/assets/tiles/tilemap2.json');
     //chargement de la musique
     //this.music = game.add.audio('music_file');
 
@@ -69,21 +70,30 @@ function create(){
 
     //ajout de la map
     //                              clé de la tilemap
-    const map = this.make.tilemap({ key: 'map' });
-    //                                  clé de l'image avec les tiles
-    const tileset = map.addTilesetImage('tileimage',"tiles",16,16,0,0); //définition du tileset utilisé
-
+    const map = this.make.tilemap({ key: 'map1' });
+    //                                  clé de l'image avec les tiles(du ficher JSON)
+    const tileset = map.addTilesetImage("tileimage",'tilesPng',16,16,0,0); //définition du tileset utilisé
+    //                                                      x   y
     const platforms = map.createLayer('platforms', tileset, 0, 200);//plan des platformes
+    //ajout de la map2
+    //                              clé de la tilemap
+    const map2 = this.make.tilemap({ key: 'map2' });
+    //                                  clé de l'image avec les tiles
+    const tileset2 = map2.addTilesetImage('tileimage',"tilesPng",16,16,0,0); //définition du tileset utilisé
+    //                                                         x   y
+    const platforms2 = map2.createLayer('platforms', tileset2, 16*30, 200);//plan des platformes
     
 
     // ajouter de la collision aux plateformes:
     platforms.setCollision([1,2,3,285,57,58,59]); 
     this.physics.add.collider(this.player, platforms);
+    platforms2.setCollision([1,2,3,285,57,58,59]); 
+    this.physics.add.collider(this.player, platforms2);
 
-    //Camera centrée sur le personnage
+    // Camera centrée sur le personnage
     this.cameras.main.startFollow(this.player,true,1,0.05);
 
-    console.log(this) //affichage du debug avec la hitbox et l'accélération
+    console.log(this) // affichage du debug avec la hitbox et l'accélération
 }
 function update(){
     //variable vitesse
