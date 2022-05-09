@@ -3,14 +3,13 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
     physics: { // physiques pour simuler une gravité
         default: 'arcade',
         arcade: {
-        debug: true,
+        debug: true, // affichage du debug avec la hitbox et l'accélération
         gravity: { y: 100 }
         }
     },
     input: {
         gamepad: true // fonctionalité à venir : prise en charge de manette
     },
-    //zoom: 4,
     pixelArt: true, //retire l'anti aliasing pour éviter un effet de flou sur le pixel art
     scale: {
         mode: Phaser.Scale.RESIZE, // fenetre adaptive
@@ -28,7 +27,7 @@ let keyboard; // déclaration de variable, destinée à recevoir les inputs du c
 
 function preload() {
     //zoom
-    this.cameras.main.setZoom(this.game.config.zoom); //niveau de zoom de la caméra 
+    this.cameras.main.setZoom(2); //niveau de zoom de la caméra 
 
     //surveillance des touches
     keyboard = this.input.keyboard.createCursorKeys()
@@ -76,7 +75,7 @@ function create(){
 
     //création du joueur                  position | clé de l'image
     this.player = this.physics.add.sprite(100, 300, 'player');
-    this.player.setScale(0.5) //taille du joueur
+    this.player.setScale(1) //taille du joueur
     // animation du joueur
     this.anims.create({
         key: 'idle', 
@@ -94,7 +93,7 @@ function create(){
     // Camera centrée sur le personnage
     this.cameras.main.startFollow(this.player,true,1,0.05);
 
-    console.log(this) // affichage du debug avec la hitbox et l'accélération
+    console.log(this) 
 }
 function update(){
     //variable vitesse
@@ -104,7 +103,7 @@ function update(){
         speed_x = 50
     }
     //variable saut
-    speed_y = 100 
+    vitesseY = 100 
 
     // //sprint
     // if(keyboard.shift.isDown && this.player.body.onFloor()){
@@ -114,7 +113,7 @@ function update(){
     
     // Mouvement Horizontal
     if(this.player.body.onFloor()){
-        this.player.setVelocityX(0);// arrête le mouvement de la frame précédente
+        this.player.setVelocityX(0); // arrête le mouvement de la frame précédente
     }
     if (keyboard.left.isDown) {
         this.player.body.setVelocityX(-speed_x);
@@ -124,7 +123,7 @@ function update(){
 
     // Mouvement vertical
     if ((keyboard.up.isDown) && this.player.body.onFloor()) {
-        this.player.setVelocityY(-speed_y);
+        this.player.setVelocityY(-vitesseY);
         //this.player.play('jump', true); /*animation de saut pas encore implémentée*/
     }
 }
