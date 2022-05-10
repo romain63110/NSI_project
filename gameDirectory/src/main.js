@@ -11,6 +11,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         gamepad: true // fonctionalité à venir : prise en charge de manette
     },
     pixelArt: true, //retire l'anti aliasing pour éviter un effet de flou sur le pixel art
+    zoom: 2,
     scale: {
         mode: Phaser.Scale.RESIZE, // fenetre adaptive
     },
@@ -27,7 +28,7 @@ let keyboard; // déclaration de variable, destinée à recevoir les inputs du c
 
 function preload() {
     //zoom
-    this.cameras.main.setZoom(2); //niveau de zoom de la caméra 
+    this.cameras.main.setZoom(this.game.config.zoom); //niveau de zoom de la caméra 
 
     //surveillance des touches
     keyboard = this.input.keyboard.createCursorKeys()
@@ -38,11 +39,12 @@ function preload() {
     //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
     this.load.spritesheet('player', './src/assets/images/testSprite.png', { frameWidth: 32, frameHeight: 32 });
     //chargement des pixels art de tuiles
-    this.load.image('tilesPng', './src/assets/tiles/tilesimage1.png');
+    this.load.image('tilesPng', './src/assets/tiles/tilesets.png');
     //chargement de la carte de tuile réalisée via Tiled
-    this.load.tilemapTiledJSON('map1', './src/assets/tiles/tilemap1.json');
+    this.load.tilemapTiledJSON('start', './src/assets/tiles/tilemap1.json');
     this.load.tilemapTiledJSON('map2', './src/assets/tiles/tilemap2.json');
-    this.load.tilemapTiledJSON('map3', './src/assets/tiles/tilemap2.json');
+    this.load.tilemapTiledJSON('edgeMap', './src/assets/tiles/edge_map.json');
+    // this.load.tilemapTiledJSON('map3', './src/assets/tiles/tilemap3.json');
     //chargement de la musique
     //this.music = game.add.audio('music_file');
 
@@ -51,30 +53,46 @@ function create(){
     //lancement de la musique
     //this.music.play();
 
+    const max_y = 100;
     var map = [];
+    for(i=0;i<=max_y;i++){
+        map[i]=[];
+    }
     var tileset = [];
+    for(i=0;i<=max_y;i++){
+        tileset[i]=[];
+    }
     var platforms = [];
+    for(i=0;i<=max_y;i++){
+        platforms[i]=[];
+    }
+    var cables = [];
+    for(i=0;i<=max_y;i++){
+        cables[i]=[];
+    }
 
-    function moreMap(self,index,tilemapKey){
+    function moreMap(self,xindex,yindex,tilemapKey){
         //ajout de la map
         //                              clé de la tilemap
-        map[index] = self.make.tilemap({ key: tilemapKey });
+        map[yindex][xindex] = self.make.tilemap({ key: tilemapKey });
         //                                  clé de l'image avec les tiles
-        tileset[index] = map[index].addTilesetImage('tileimage',"tilesPng",16,16,0,0); //définition du tileset utilisé
+        tileset[yindex][xindex] = map[yindex][xindex].addTilesetImage('tilesets',"tilesPng",16,16,0,0); //définition du tileset utilisé
         //                                                         x   y
-        platforms[index] = map[index].createLayer('platforms', tileset[index] , index*16*30, 200);//plan des platformes
+        platforms[yindex][xindex] = map[yindex][xindex].createLayer('platforms', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
+        //                                                         x   y
+        cables[yindex][xindex] = map[yindex][xindex].createLayer('cables', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
 
         // ajouter de la collision aux plateformes:
-        platforms[index].setCollision([1,2,3,57,58,59,]); 
-        self.physics.add.collider(self.player, platforms[index]);
+        platforms[yindex][xindex].setCollisionByExclusion([0,-1])
+        self.physics.add.collider(self.player, platforms[yindex][xindex]);
     }
 
     //ajout de l'arrière plan          position   image    origine         taille
-    this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(2, 2);
+    this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(5, 5);
     this.background_1.setScrollFactor(0.5)//valeur comparée avec la caméra pour le parallaxe
 
     //création du joueur                  position | clé de l'image
-    this.player = this.physics.add.sprite(100, 300, 'player');
+    this.player = this.physics.add.sprite(1*30*16+8*16, 2*20*16+18*16, 'player');
     this.player.setScale(1) //taille du joueur
     // animation du joueur
     this.anims.create({
@@ -86,14 +104,41 @@ function create(){
     this.player.play('idle'); //on joue l'aniamtion
 
     //ajout de la map
-    moreMap(this,0,'map1');
-    moreMap(this,1,'map2');
-    moreMap(this,2,'map3');
+    //      this,xindex,yindex,name(tilemapTiledJSON)
+    moreMap(this,0,1,'edgeMap');
+    moreMap(this,0,2,'edgeMap');
+    moreMap(this,0,3,'edgeMap');
+
+    moreMap(this,1,1,'edgeMap');
+    moreMap(this,1,2,'start');
+    moreMap(this,1,3,'edgeMap');
+    
+    moreMap(this,2,1,'edgeMap');
+    moreMap(this,2,2,'map2');
+    moreMap(this,2,3,'edgeMap');
+    
+    
     
     // Camera centrée sur le personnage
     this.cameras.main.startFollow(this.player,true,1,0.05);
 
-    console.log(this) 
+    //debug
+    console.log(this)
+    // for (yi=0;yi<platforms.length;yi++){
+    //     for (xi=0;xi<platforms[yi].length;xi++){
+    //         try {
+    //             const debugGraphics = this.add.graphics().setAlpha(0.5);
+    //             platforms[yi][xi].renderDebug(debugGraphics, {
+    //                 tileColor: null, // Color of non-colliding tiles
+    //                 collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+    //                 faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+    //             });
+    //         } catch{
+
+    //         }
+    //     }
+    // }
+    
 }
 function update(){
     //variable vitesse
