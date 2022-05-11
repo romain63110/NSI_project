@@ -71,7 +71,7 @@ function create(){
         cables[i]=[];
     }
 
-    function moreMap(self,xindex,yindex,tilemapKey){
+    function moreMap(self,xindex,yindex,tilemapKey,collision){
         //ajout de la map
         //                              clé de la tilemap
         map[yindex][xindex] = self.make.tilemap({ key: tilemapKey });
@@ -82,9 +82,11 @@ function create(){
         //                                                         x   y
         cables[yindex][xindex] = map[yindex][xindex].createLayer('cables', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
 
-        // ajouter de la collision:
-        platforms[yindex][xindex].setCollisionByProperty({ collides:true })
-        self.physics.add.collider(self.player, platforms[yindex][xindex]);
+        if(collision){
+            // ajouter de la collision:
+            platforms[yindex][xindex].setCollisionByProperty({ collides:true })
+            self.physics.add.collider(self.player, platforms[yindex][xindex]);
+        }
     }
 
     //ajout de l'arrière plan          position   image    origine         taille
@@ -104,20 +106,18 @@ function create(){
     this.player.play('idle'); //on joue l'aniamtion
 
     //ajout de la map
-    //      this,xindex,yindex,name(tilemapTiledJSON)
-    moreMap(this,0,1,'edgeMap');
-    moreMap(this,0,2,'edgeMap');
-    moreMap(this,0,3,'edgeMap');
+    //      this,xindex,yindex,name(tilemapTiledJSON),collision?
+    moreMap(this,0,1,'edgeMap',false);
+    moreMap(this,0,2,'edgeMap',true);
+    moreMap(this,0,3,'edgeMap',false);
 
-    moreMap(this,1,1,'edgeMap');
-    moreMap(this,1,2,'start');
-    moreMap(this,1,3,'edgeMap');
+    moreMap(this,1,1,'edgeMap',false);
+    moreMap(this,1,2,'start',true);
+    moreMap(this,1,3,'edgeMap',false);
     
-    moreMap(this,2,1,'edgeMap');
-    moreMap(this,2,2,'map1');
-    moreMap(this,2,3,'edgeMap');
-    
-    
+    moreMap(this,2,1,'edgeMap',false);
+    moreMap(this,2,2,'map1',true);
+    moreMap(this,2,3,'edgeMap',false);
     
     // Camera centrée sur le personnage
     this.cameras.main.startFollow(this.player,true,1,0.05);
@@ -137,8 +137,7 @@ function create(){
 
     //         }
     //     }
-    // }
-    
+    // } 
 }
 function update(){
     //variable vitesse
