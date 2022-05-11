@@ -173,7 +173,8 @@ function create(){
     this.player.setScale(1) //taille du joueur
     this.player.setFixedRotation() //
     this.player.setFriction(0)
-    //this.player.setFrictionAir(0)
+    // this.player.setFrictionStatic(0)
+    // this.player.setFrictionAir(0)
 
     // animation du joueur
     this.anims.create({
@@ -183,6 +184,15 @@ function create(){
         repeat: -1 //infini
     });
     this.player.play('idle'); //on joue l'aniamtion
+
+    // const group = this.matter.world.nextGroup(true);
+    // const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: true, lineColor: 0x29070D, lineOpacity: 1, fillColor: 0x29070D, fillOpacity:1,} };
+    // const constraintOptions = { stiffness: 0.5 };
+
+    // // softBody: function (x, y, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions)
+    // this.cloth = this.matter.add.softBody(700, 850, 3, 5, 0.1, 0.1, true, 1, particleOptions, constraintOptions);
+    // this.cloth.bodies[0].isStatic = true;
+    // this.cloth.bodies[4].isStatic = true;
 
     //ajout de la map
     //      this,xindex,yindex,name(tilemapTiledJSON),collision?
@@ -219,6 +229,12 @@ function create(){
     // } 
 }
 function update(){
+    // this.cloth.bodies[0].position.y = this.player.y-8
+    // this.cloth.bodies[4].position.y = this.player.y-8
+
+    // this.cloth.bodies[0].position.x = this.player.x-16-5
+    // this.cloth.bodies[4].position.x = this.player.x-16
+    
     //variable vitesse
     if(true){//this.player.body.onFloor()
         speed_x = 2
