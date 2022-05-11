@@ -172,10 +172,8 @@ function create(){
     this.player = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player');
     this.player.setScale(1) //taille du joueur
     this.player.setFixedRotation() //
-    // this.player.friction = 10;
-    // this.player.frictionAir = 0.001;
-    // this.player.restitution = 1;
-    // this.player.density = 50;
+    this.player.setFriction(0)
+    //this.player.setFrictionAir(0)
 
     // animation du joueur
     this.anims.create({
