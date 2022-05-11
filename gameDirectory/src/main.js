@@ -117,7 +117,7 @@ HUD.prototype = {
 
     create: function ()
     {
-        this.face = this.add.image(100, 100, 'background');
+        this.face = this.add.image(0, 0, 'background').setScale(0.2, 0.2);
     }
 
 };
@@ -138,6 +138,8 @@ function preload() {
 
     //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
     this.load.spritesheet('player', './src/assets/images/robotSprite.png', { frameWidth: 16, frameHeight: 32 });
+    // Load body shapes from JSON file generated using PhysicsEditor
+    this.load.json('robotShapes', './src/assets/collides/robot_collides.json');
     //chargement des pixels art de tuiles
     this.load.image('tilesPng', './src/assets/tiles/tilesets.png');
     //chargement de la carte de tuile réalisée via Tiled
@@ -194,8 +196,12 @@ function create(){
     this.background_1 = this.add.image(0, 0,'background').setOrigin(0, 0).setScale(5, 5);
     this.background_1.setScrollFactor(0.5)//valeur comparée avec la caméra pour le parallaxe
 
-    //création du joueur                  position | clé de l'image
-    this.player = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player');
+    // collision du joueur
+    var shapes = this.cache.json.get('robotShapes');
+    console.log(shapes)
+
+    //création du joueur                  position | clé de l'image                  //for complex collision create with PhysicsEditor
+    this.player = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player','robotSprite',{shape: shapes.robotSprite});
     this.player.setScale(1) //taille du joueur
     this.player.setFixedRotation() //
     this.player.setFriction(0)
