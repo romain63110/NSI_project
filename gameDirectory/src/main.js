@@ -41,8 +41,8 @@ function preload() {
     //chargement des pixels art de tuiles
     this.load.image('tilesPng', './src/assets/tiles/tilesets.png');
     //chargement de la carte de tuile réalisée via Tiled
-    this.load.tilemapTiledJSON('start', './src/assets/tiles/tilemap1.json');
-    this.load.tilemapTiledJSON('map2', './src/assets/tiles/tilemap2.json');
+    this.load.tilemapTiledJSON('start', './src/assets/tiles/tilemap_start.json');
+    this.load.tilemapTiledJSON('map1', './src/assets/tiles/tilemap1.json');
     this.load.tilemapTiledJSON('edgeMap', './src/assets/tiles/edge_map.json');
     // this.load.tilemapTiledJSON('map3', './src/assets/tiles/tilemap3.json');
     //chargement de la musique
@@ -82,8 +82,8 @@ function create(){
         //                                                         x   y
         cables[yindex][xindex] = map[yindex][xindex].createLayer('cables', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
 
-        // ajouter de la collision aux plateformes:
-        platforms[yindex][xindex].setCollisionByExclusion([0,-1])
+        // ajouter de la collision:
+        platforms[yindex][xindex].setCollisionByProperty({ collides:true })
         self.physics.add.collider(self.player, platforms[yindex][xindex]);
     }
 
@@ -114,7 +114,7 @@ function create(){
     moreMap(this,1,3,'edgeMap');
     
     moreMap(this,2,1,'edgeMap');
-    moreMap(this,2,2,'map2');
+    moreMap(this,2,2,'map1');
     moreMap(this,2,3,'edgeMap');
     
     
