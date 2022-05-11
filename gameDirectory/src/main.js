@@ -93,10 +93,36 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         preload: preload,// préchargement (une fois au chargement de la page, utilisé pour charger des images et autres ressources),
         create: create, //instanciations dans le code, appelée une fois apres preload()
         update: update //et réactualisation (utilisé pour la surveillance des touches), appelée en boucle
-    }
+    },
 }
 
 const game = new Phaser.Game(config); //création du jeu
+
+//HUD
+var HUD = {};
+
+HUD = function ()
+{
+    this.face = null;
+};
+
+HUD.prototype.constructor = HUD;
+
+HUD.prototype = {
+
+    preload: function ()
+    {
+        this.load.image('background', './src/assets/images/background.png');
+    },
+
+    create: function ()
+    {
+        this.face = this.add.image(100, 100, 'background');
+    }
+
+};
+var HUD_scene = game.scene.add('HUD', HUD, true);
+
 
 let keyboard; // déclaration de variable, destinée à recevoir les inputs du clavier
 
@@ -111,7 +137,7 @@ function preload() {
     this.load.image('background', './src/assets/images/background.png');
 
     //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
-    this.load.spritesheet('player', './src/assets/images/testSprite.png', { frameWidth: 32, frameHeight: 32 });
+    this.load.spritesheet('player', './src/assets/images/robotSprite.png', { frameWidth: 16, frameHeight: 32 });
     //chargement des pixels art de tuiles
     this.load.image('tilesPng', './src/assets/tiles/tilesets.png');
     //chargement de la carte de tuile réalisée via Tiled
