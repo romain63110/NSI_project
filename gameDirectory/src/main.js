@@ -198,7 +198,6 @@ function create(){
 
     // collision du joueur
     var shapes = this.cache.json.get('robotShapes');
-    console.log(shapes)
 
     //création du joueur                  position | clé de l'image                  //for complex collision create with PhysicsEditor
     this.player = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player','robotSprite',{shape: shapes.robotSprite});
@@ -217,14 +216,14 @@ function create(){
     });
     this.player.play('idle'); //on joue l'aniamtion
 
-    // const group = this.matter.world.nextGroup(true);
-    // const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: true, lineColor: 0x29070D, lineOpacity: 1, fillColor: 0x29070D, fillOpacity:1,} };
-    // const constraintOptions = { stiffness: 0.5 };
+    const group = this.matter.world.nextGroup(true);
+    const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: true, lineColor: 0x29070D, lineOpacity: 1, fillColor: 0x29070D, fillOpacity:1,} };
+    const constraintOptions = { stiffness: 0.5 };
 
-    // // softBody: function (x, y, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions)
-    // this.cloth = this.matter.add.softBody(700, 850, 3, 5, 0.1, 0.1, true, 1, particleOptions, constraintOptions);
-    // this.cloth.bodies[0].isStatic = true;
-    // this.cloth.bodies[4].isStatic = true;
+    // softBody: function (x, y, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions)
+    this.cloth = this.matter.add.softBody(700, 850, 3, 5, 1, 1, false, 1, particleOptions, constraintOptions);
+    this.cloth.bodies[0].isStatic = true;
+    this.cloth.bodies[4].isStatic = true;
 
     //ajout de la map
     //      this,xindex,yindex,name(tilemapTiledJSON),collision?
@@ -245,27 +244,13 @@ function create(){
 
     //debug
     console.log(this)
-    // for (yi=0;yi<platforms.length;yi++){
-    //     for (xi=0;xi<platforms[yi].length;xi++){
-    //         try {
-    //             const debugGraphics = this.add.graphics().setAlpha(0.5);
-    //             platforms[yi][xi].renderDebug(debugGraphics, {
-    //                 tileColor: null, // Color of non-colliding tiles
-    //                 collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-    //                 faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-    //             });
-    //         } catch{
-
-    //         }
-    //     }
-    // } 
 }
 function update(){
-    // this.cloth.bodies[0].position.y = this.player.y-8
-    // this.cloth.bodies[4].position.y = this.player.y-8
+    this.cloth.bodies[0].position.y = this.player.y-2
+    this.cloth.bodies[4].position.y = this.player.y-2
 
-    // this.cloth.bodies[0].position.x = this.player.x-16-5
-    // this.cloth.bodies[4].position.x = this.player.x-16
+    this.cloth.bodies[0].position.x = this.player.x-16+12
+    this.cloth.bodies[4].position.x = this.player.x-16+7
     
     //variable vitesse
     if(true){//this.player.body.onFloor()
