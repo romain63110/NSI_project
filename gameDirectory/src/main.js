@@ -1,10 +1,23 @@
 const config = { // configuration du phaser avec les propriétés de bases de phaser
     type: Phaser.AUTO, //moteur de rendu (WebGL par défaut, Canvas si incompatible avec un vieux navigateur comme internet explorer)
-    physics: { // physiques pour simuler une gravité
-        default: 'arcade',
-        arcade: {
-        debug: true, // affichage du debug avec la hitbox et l'accélération
-        gravity: { y: 100 }
+    // physics: { // physiques pour simuler une gravité
+    //     default: 'arcade',
+    //     arcade: {
+    //     debug: true, // affichage du debug avec la hitbox et l'accélération
+    //     gravity: { y: 100 }
+    //     }
+    // },
+    physics: {
+        default: 'matter',
+        matter: {
+            enableSleeping: false,
+            gravity: {
+                y: 0.2
+            },
+            debug: {
+                showBody: true,
+                showStaticBody: true
+            }
         }
     },
     input: {
@@ -45,6 +58,7 @@ function preload() {
     this.load.tilemapTiledJSON('map1', './src/assets/tiles/tilemap1.json');
     this.load.tilemapTiledJSON('edgeMap', './src/assets/tiles/edge_map.json');
     // this.load.tilemapTiledJSON('map3', './src/assets/tiles/tilemap3.json');
+
     //chargement de la musique
     //this.music = game.add.audio('music_file');
 
@@ -85,7 +99,7 @@ function create(){
         if(collision){
             // ajouter de la collision:
             platforms[yindex][xindex].setCollisionByProperty({ collides:true })
-            self.physics.add.collider(self.player, platforms[yindex][xindex]);
+            self.matter.world.convertTilemapLayer(platforms[yindex][xindex]);
         }
     }
 
@@ -94,8 +108,12 @@ function create(){
     this.background_1.setScrollFactor(0.5)//valeur comparée avec la caméra pour le parallaxe
 
     //création du joueur                  position | clé de l'image
-    this.player = this.physics.add.sprite(1*30*16+8*16, 2*20*16+18*16, 'player');
+    this.player = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player');
     this.player.setScale(1) //taille du joueur
+    this.player.setFixedRotation() //
+    // this.player.friction = 0;
+    // this.player.frictionAir = 0.001;
+
     // animation du joueur
     this.anims.create({
         key: 'idle', 
@@ -141,32 +159,32 @@ function create(){
 }
 function update(){
     //variable vitesse
-    if(this.player.body.onFloor()){
-        speed_x = 50
+    if(true){//this.player.body.onFloor()
+        speed_x = 2
     }else{
-        speed_x = 50
+        speed_x = 2
     }
     //variable saut
-    vitesseY = 100 
+    vitesseY = 4 
 
     // //sprint
     // if(keyboard.shift.isDown && this.player.body.onFloor()){
-    //     //speed_y = 300 
-    //     speed_x = 100
+    //     //speed_y = 3
+    //     speed_x = 4
     // }
     
     // Mouvement Horizontal
-    if(this.player.body.onFloor()){
+    if(true){//this.player.body.onFloor()
         this.player.setVelocityX(0); // arrête le mouvement de la frame précédente
     }
     if (keyboard.left.isDown) {
-        this.player.body.setVelocityX(-speed_x);
+        this.player.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown) {
-        this.player.body.setVelocityX(speed_x);
+        this.player.setVelocityX(speed_x);
     }
 
     // Mouvement vertical
-    if ((keyboard.up.isDown) && this.player.body.onFloor()) {
+    if (keyboard.up.isDown && true) {//this.player.body.onFloor()
         this.player.setVelocityY(-vitesseY);
         //this.player.play('jump', true); /*animation de saut pas encore implémentée*/
     }
