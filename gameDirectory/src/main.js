@@ -85,7 +85,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         gamepad: true // fonctionalité à venir : prise en charge de manette
     },
     pixelArt: true, //retire l'anti aliasing pour éviter un effet de flou sur le pixel art
-    zoom: 2,
+    zoom: 3,
     scale: {
         mode: Phaser.Scale.RESIZE, // fenetre adaptive
     },
@@ -263,12 +263,12 @@ function update(){
     
     //variable vitesse
     if(true){//this.player.body.onFloor()
-        speed_x = 2
+        speed_x = 1
     }else{
-        speed_x = 2
+        speed_x = 1
     }
     //variable saut
-    vitesseY = 4 
+    vitesseY = 3
 
     // //sprint
     // if(keyboard.shift.isDown && this.player.body.onFloor()){
