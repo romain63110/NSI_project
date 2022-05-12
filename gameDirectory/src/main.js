@@ -13,7 +13,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
             enableSleeping: false,
             gravity: {
                 y: 0.2
-            },
+            },/*
             debug: {
                 showAxes: false,
                 showAngleIndicator: true,
@@ -78,7 +78,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
     
                 showConvexHulls: true,
                 hullColor: 0xd703d0
-            }
+            }*/
         }
     },
     input: {
@@ -210,8 +210,8 @@ function create(){
     // animation du joueur
     this.anims.create({
         key: 'idle', 
-        frames: this.anims.generateFrameNumbers('player', { frames: [ 0, 1, 2, 3, 4, 5, ] }),//frames animées
-        frameRate: 12, // douze images par seconde
+        frames: this.anims.generateFrameNumbers('player', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frameRate: 10, // six images par seconde
         repeat: -1 //infini
     });
     this.player.play('idle'); //on joue l'aniamtion
