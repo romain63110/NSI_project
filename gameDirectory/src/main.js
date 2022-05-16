@@ -123,6 +123,7 @@ var HUD_scene = game.scene.add('HUD', HUD, true);
 
 
 let keyboard; // déclaration de variable, destinée à recevoir les inputs du clavier
+let player;
 
 function preload() {
     //zoom
@@ -198,13 +199,16 @@ function create(){
     var shapes = this.cache.json.get('robotShapes');
 
     //création du joueur                  position | clé de l'image                  //for complex collision create with PhysicsEditor
-    this.player = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player','robotSprite',{shape: shapes.robotSprite});
-    this.player.setScale(1) //taille du joueur
-    this.player.setFixedRotation() //
-    this.player.setFriction(0)
-    // this.player.setFrictionStatic(0)
-    // this.player.setFrictionAir(0)
+    player_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player','robotSprite',{shape: shapes.robotSprite});
+    player_matter.setScale(1) //taille du joueur
+    player_matter.setFixedRotation() //
+    player_matter.setFriction(0)
+    // player.setFrictionStatic(0)
+    // player.setFrictionAir(0)
 
+    player = player_matter || {};
+    player.onTheFloor = true;
+    
     // animation du joueur
     this.anims.create({
         key: 'idle', 
@@ -212,7 +216,7 @@ function create(){
         frameRate: 10, // six images par seconde
         repeat: -1 //infini
     });
-    this.player.play('idle'); //on joue l'aniamtion
+    player.play('idle'); //on joue l'aniamtion
 
     // const group = this.matter.world.nextGroup(true);
     // const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: true, lineColor: 0x29070D, lineOpacity: 1, fillColor: 0x29070D, fillOpacity:1,} };
@@ -238,21 +242,38 @@ function create(){
     moreMap(this,2,3,'edgeMap',false);
     
     // Camera centrée sur le personnage
-    this.cameras.main.startFollow(this.player,true,1,0.05);
+    this.cameras.main.startFollow(player,true,1,0.05);
+
+    this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
+        const demi_largeur_tiles=16/2;
+
+        if(bodyA.parent.label == 'robotSprite'){
+            if(bodyB.position.x-demi_largeur_tiles < bodyA.position.x < bodyB.position.x+demi_largeur_tiles){//perso sur ou dessous le BodyB
+                if(bodyA.position.y < bodyB.position.y){//perso sur ou dessous le BodyB
+                    console.log('collision on the bottom(foot) of the player')
+                    player.onTheFloor = true;
+                }else{
+                    console.log('collision on the top(head) of the player')
+                }
+            }else{
+                console.log('out x')
+            }
+        }
+    });
 
     //debug
     console.log(this);
-    console.log(platforms);
+    console.log(player);
 }
 function update(){
-    // this.cloth.bodies[0].position.y = this.player.y-2
-    // this.cloth.bodies[4].position.y = this.player.y-2
+    // this.cloth.bodies[0].position.y = player.y-2
+    // this.cloth.bodies[4].position.y = player.y-2
 
-    // this.cloth.bodies[0].position.x = this.player.x-16+12
-    // this.cloth.bodies[4].position.x = this.player.x-16+7
+    // this.cloth.bodies[0].position.x = player.x-16+12
+    // this.cloth.bodies[4].position.x = player.x-16+7
     
     //variable vitesse
-    if(true){//this.player.body.onFloor()
+    if(player.onTheFloor){
         speed_x = 1.5
     }else{
         speed_x = 1.5
@@ -262,18 +283,19 @@ function update(){
 
     
     // Mouvement Horizontal
-    if(true){//this.player.body.onFloor()
-        this.player.setVelocityX(0); // arrête le mouvement de la frame précédente
+    if(player.onTheFloor){
+        player.setVelocityX(0); // arrête le mouvement de la frame précédente
     }
     if (keyboard.left.isDown) {
-        this.player.setVelocityX(-speed_x);
+        player.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown) {
-        this.player.setVelocityX(speed_x);
+        player.setVelocityX(speed_x);
     }
 
     // Mouvement vertical
-    if (keyboard.up.isDown && true) {//this.player.body.onFloor()
-        this.player.setVelocityY(-vitesseY);
-        //this.player.play('jump', true); /*animation de saut pas encore implémentée*/
+    if (keyboard.up.isDown && player.onTheFloor) {
+        player.setVelocityY(-vitesseY);
+        player.onTheFloor = false;
+        //player.play('jump', true); /*animation de saut pas encore implémentée*/
     }
 }
