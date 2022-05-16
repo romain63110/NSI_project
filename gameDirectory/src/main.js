@@ -12,8 +12,8 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         matter: {
             enableSleeping: false,
             gravity: {
-                y: 0.8
-            },/*
+                y: 1
+            },
             debug: {
                 showAxes: false,
                 showAngleIndicator: true,
@@ -78,7 +78,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
     
                 showConvexHulls: true,
                 hullColor: 0xd703d0
-            }*/
+            }
         }
     },
     input: {
@@ -259,7 +259,7 @@ function update(){
         speed_x = 1.5
     }
     //variable saut
-    vitesseY = 3
+    vitesseY = 4
 
     
     // Mouvement Horizontal
