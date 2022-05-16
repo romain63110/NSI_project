@@ -12,7 +12,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         matter: {
             enableSleeping: false,
             gravity: {
-                y: 0.2
+                y: 0.8
             },/*
             debug: {
                 showAxes: false,
@@ -254,18 +254,13 @@ function update(){
     
     //variable vitesse
     if(true){//this.player.body.onFloor()
-        speed_x = 1
+        speed_x = 1.5
     }else{
-        speed_x = 1
+        speed_x = 1.5
     }
     //variable saut
     vitesseY = 3
 
-    // //sprint
-    // if(keyboard.shift.isDown && this.player.body.onFloor()){
-    //     //speed_y = 3
-    //     speed_x = 4
-    // }
     
     // Mouvement Horizontal
     if(true){//this.player.body.onFloor()
