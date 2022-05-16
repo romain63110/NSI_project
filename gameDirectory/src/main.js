@@ -101,10 +101,7 @@ const game = new Phaser.Game(config); //création du jeu
 //HUD
 var HUD = {};
 
-HUD = function ()
-{
-    this.face = null;
-};
+HUD = function (){};
 
 HUD.prototype.constructor = HUD;
 
@@ -118,6 +115,7 @@ HUD.prototype = {
     create: function ()
     {
         this.face = this.add.image(0, 0, 'background').setScale(0.2, 0.2);
+        this.add.text(0, 0, 'HUD', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 });
     }
 
 };
@@ -216,14 +214,14 @@ function create(){
     });
     this.player.play('idle'); //on joue l'aniamtion
 
-    const group = this.matter.world.nextGroup(true);
-    const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: true, lineColor: 0x29070D, lineOpacity: 1, fillColor: 0x29070D, fillOpacity:1,} };
-    const constraintOptions = { stiffness: 0.5 };
+    // const group = this.matter.world.nextGroup(true);
+    // const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: true, lineColor: 0x29070D, lineOpacity: 1, fillColor: 0x29070D, fillOpacity:1,} };
+    // const constraintOptions = { stiffness: 0.5 };
 
     // softBody: function (x, y, columns, rows, columnGap, rowGap, crossBrace, particleRadius, particleOptions, constraintOptions)
-    this.cloth = this.matter.add.softBody(700, 850, 3, 5, 1, 1, false, 1, particleOptions, constraintOptions);
-    this.cloth.bodies[0].isStatic = true;
-    this.cloth.bodies[4].isStatic = true;
+    // this.cloth = this.matter.add.softBody(700, 850, 3, 5, 1, 1, false, 1, particleOptions, constraintOptions);
+    // this.cloth.bodies[0].isStatic = true;
+    // this.cloth.bodies[4].isStatic = true;
 
     //ajout de la map
     //      this,xindex,yindex,name(tilemapTiledJSON),collision?
@@ -243,14 +241,15 @@ function create(){
     this.cameras.main.startFollow(this.player,true,1,0.05);
 
     //debug
-    console.log(this)
+    console.log(this);
+    console.log(platforms);
 }
 function update(){
-    this.cloth.bodies[0].position.y = this.player.y-2
-    this.cloth.bodies[4].position.y = this.player.y-2
+    // this.cloth.bodies[0].position.y = this.player.y-2
+    // this.cloth.bodies[4].position.y = this.player.y-2
 
-    this.cloth.bodies[0].position.x = this.player.x-16+12
-    this.cloth.bodies[4].position.x = this.player.x-16+7
+    // this.cloth.bodies[0].position.x = this.player.x-16+12
+    // this.cloth.bodies[4].position.x = this.player.x-16+7
     
     //variable vitesse
     if(true){//this.player.body.onFloor()
