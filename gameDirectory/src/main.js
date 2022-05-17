@@ -124,6 +124,10 @@ var HUD_scene = game.scene.add('HUD', HUD, true);
 
 let keyboard; // déclaration de variable, destinée à recevoir les inputs du clavier
 let player;
+test1x = 0;//collision debug
+test1y = 0;//collision debug
+test2x = 0;//collision debug
+test2y = 0;//collision debug
 
 function preload() {
     //zoom
@@ -199,7 +203,7 @@ function create(){
     var shapes = this.cache.json.get('robotShapes');
 
     //création du joueur                  position | clé de l'image                  //for complex collision create with PhysicsEditor
-    player_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player','robotSprite',{shape: shapes.robotSprite});
+    player_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player','robotSprite',{shape: shapes.robotSprite}).setOrigin(0.5,0.5);
     player_matter.setScale(1) //taille du joueur
     player_matter.setFixedRotation() //
     player_matter.setFriction(0)
@@ -244,26 +248,44 @@ function create(){
     // Camera centrée sur le personnage
     this.cameras.main.startFollow(player,true,1,0.05);
 
-    this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-        const demi_largeur_tiles=16/2;
+    function collision_detector(bodyA, bodyB){
+        const tolerance = 2;//demi hitbox(width) -> player
+        const demi_largeur_tiles=16/2+tolerance;
 
-        if(bodyA.parent.label == 'robotSprite'){
-            if(bodyB.position.x-demi_largeur_tiles < bodyA.position.x < bodyB.position.x+demi_largeur_tiles){//perso sur ou dessous le BodyB
-                if(bodyA.position.y < bodyB.position.y){//perso sur ou dessous le BodyB
-                    console.log('collision on the bottom(foot) of the player')
+        if(bodyA.parent.label == 'robotSprite'){                                                                 // distance avec le sol                                  
+            if(bodyB.position.x-demi_largeur_tiles < bodyA.position.x && bodyA.position.x < bodyB.position.x+demi_largeur_tiles ){//perso sur ou dessous le BodyB
+                //                                                                              //demi player+demi tile (height)
+                test2x = bodyA.position.x;//collision debug
+                test2y = bodyA.position.y;//collision debug
+                test1x = bodyB.position.x;//collision debug
+                test1y = bodyB.position.y;//collision debug
+                if(bodyA.position.y < bodyB.position.y && (bodyB.position.y - bodyA.position.y)>=12){//perso sur le BodyB
+                    console.log(bodyA.position.x - bodyB.position.x+demi_largeur_tiles)
+                    // console.log('collision on the bottom(foot) of the player')
+                    console.log('onTheFloor')
                     player.onTheFloor = true;
                 }else{
-                    console.log('collision on the top(head) of the player')
+                    // console.log('collision on the top(head) of the player')
                 }
             }else{
-                console.log('out x')
+                // console.log('out x')
             }
         }
+    }
+
+    this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
+        collision_detector(bodyA, bodyB);
+    });
+    this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
+        collision_detector(bodyA, bodyB);
     });
 
     //debug
+    this.test1 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
+    this.test2 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
     console.log(this);
     console.log(player);
+    console.log(this.test1);
 }
 function update(){
     // this.cloth.bodies[0].position.y = player.y-2
@@ -271,6 +293,11 @@ function update(){
 
     // this.cloth.bodies[0].position.x = player.x-16+12
     // this.cloth.bodies[4].position.x = player.x-16+7
+
+    this.test1.x = test1x;//collision debug
+    this.test1.y = test1y;//collision debug
+    this.test2.x = test2x;//collision debug
+    this.test2.y = test2y;//collision debug
     
     //variable vitesse
     if(player.onTheFloor){
