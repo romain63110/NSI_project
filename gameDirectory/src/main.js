@@ -14,71 +14,72 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
             gravity: {
                 y: 1
             },
-            debug: {
-                // showAxes: false,
-                // showAngleIndicator: true,
-                // angleColor: 0xe81153,
+            debug:false,
+            /* debug: {
+                showAxes: false,
+                showAngleIndicator: true,
+                angleColor: 0xe81153,
 
-                // showBroadphase: false,
-                // broadphaseColor: 0xffb400,
+                showBroadphase: false,
+                broadphaseColor: 0xffb400,
 
-                // showBounds: false,
-                // boundsColor: 0xffffff,
+                showBounds: false,
+                boundsColor: 0xffffff,
 
-                // showVelocity: true,
-                // velocityColor: 0x00aeef,
+                showVelocity: true,
+                velocityColor: 0x00aeef,
 
-                // showCollisions: true,
-                // collisionColor: 0xf5950c,
+                showCollisions: true,
+                collisionColor: 0xf5950c,
     
-                // showSeparations: false,
-                // separationColor: 0xffa500,
+                showSeparations: false,
+                separationColor: 0xffa500,
 
-                // showBody: true,
-                // showStaticBody: true,
-                // showInternalEdges: true,
+                showBody: true,
+                showStaticBody: true,
+                showInternalEdges: true,
 
-                // renderFill: false,
-                // renderLine: true,
+                renderFill: false,
+                renderLine: true,
     
-                // fillColor: 0x106909,
-                // fillOpacity: 1,
-                // lineColor: 0x28de19,
-                // lineOpacity: 1,
-                // lineThickness: 1,
+                fillColor: 0x106909,
+                fillOpacity: 1,
+                lineColor: 0x28de19,
+                lineOpacity: 1,
+                lineThickness: 1,
     
-                // staticFillColor: 0x0d177b,
-                // staticLineColor: 0x1327e4,
+                staticFillColor: 0x0d177b,
+                staticLineColor: 0x1327e4,
 
-                // showSleeping: true,
-                // staticBodySleepOpacity: 1,
-                // sleepFillColor: 0x464646,
-                // sleepLineColor: 0x999a99,
+                showSleeping: true,
+                staticBodySleepOpacity: 1,
+                sleepFillColor: 0x464646,
+                sleepLineColor: 0x999a99,
     
-                // showSensors: true,
-                // sensorFillColor: 0x0d177b,
-                // sensorLineColor: 0x1327e4,
+                showSensors: true,
+                sensorFillColor: 0x0d177b,
+                sensorLineColor: 0x1327e4,
     
-                // showPositions: true,
-                // positionSize: 4,
-                // positionColor: 0xe042da,
+                showPositions: true,
+                positionSize: 4,
+                positionColor: 0xe042da,
     
-                // showJoint: true,
-                // jointColor: 0xe0e042,
-                // jointLineOpacity: 1,
-                // jointLineThickness: 2,
+                showJoint: true,
+                jointColor: 0xe0e042,
+                jointLineOpacity: 1,
+                jointLineThickness: 2,
     
-                // pinSize: 4,
-                // pinColor: 0x42e0e0,
+                pinSize: 4,
+                pinColor: 0x42e0e0,
     
-                // springColor: 0xe042e0,
+                springColor: 0xe042e0,
     
-                // anchorColor: 0xefefef,
-                // anchorSize: 4,
+                anchorColor: 0xefefef,
+                anchorSize: 4,
     
-                // showConvexHulls: true,
-                // hullColor: 0xd703d0
-            }
+                showConvexHulls: true,
+                hullColor: 0xd703d0
+            }*/
         }
     },
     input: {
@@ -124,10 +125,12 @@ var HUD_scene = game.scene.add('HUD', HUD, true);
 
 let keyboard; // déclaration de variable, destinée à recevoir les inputs du clavier
 let player;
-test1x = 0;//collision debug
-test1y = 0;//collision debug
-test2x = 0;//collision debug
-test2y = 0;//collision debug
+lastXCollisionx = 0;//collision
+lastXCollisiony = 0;//collision
+// test1x = 0;//collision debug
+// test1y = 0;//collision debug
+// test2x = 0;//collision debug
+// test2y = 0;//collision debug
 
 function preload() {
     //zoom
@@ -142,7 +145,7 @@ function preload() {
     //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
     this.load.spritesheet('player', './src/assets/images/robotSprite.png', { frameWidth: 16, frameHeight: 32 });
     // Load body shapes from JSON file generated using PhysicsEditor
-    this.load.json('robotShapes', './src/assets/collides/robot_collides.json');
+    this.load.json('robotShapes', './src/assets/collides/robot_collides_rounded.json');
     //chargement des pixels art de tuiles
     this.load.image('tilesPng', './src/assets/tiles/tilesets.png');
     //chargement de la carte de tuile réalisée via Tiled
@@ -250,28 +253,24 @@ function create(){
     this.cameras.main.startFollow(player,true,1,0.05);
 
     function collision_detector(bodyA, bodyB){
-        const tolerance = 2;//demi hitbox(width) -> player
+        const tolerance = 3;//distance entre le centre est le bord de la colision
         const demi_largeur_tiles=16/2+tolerance;
 
-        if(bodyA.parent.label == 'robotSprite'){                                                                 // distance avec le sol                                  
-            if(bodyB.position.x-demi_largeur_tiles < bodyA.position.x && bodyA.position.x < bodyB.position.x+demi_largeur_tiles ){//perso sur ou dessous le BodyB
-                //                                                                              //demi player+demi tile (height)
-                test2x = bodyA.position.x;//collision debug
-                test2y = bodyA.position.y;//collision debug
-                test1x = bodyB.position.x;//collision debug
-                test1y = bodyB.position.y;//collision debug
-                if(bodyA.position.y < bodyB.position.y && (bodyB.position.y - bodyA.position.y)>=12){//perso sur le BodyB
-                    console.log(bodyA.position.x - bodyB.position.x+demi_largeur_tiles)
-                    // console.log('collision on the bottom(foot) of the player')
+        if(bodyA.parent.label == 'robotSprite'){
+            if(bodyB.position.x-demi_largeur_tiles < bodyA.position.x && bodyA.position.x < bodyB.position.x+demi_largeur_tiles){
+                lastXCollisionx = bodyB.position.x;//B
+                lastXCollisiony = bodyB.position.y;//B
+                // test1x = bodyB.position.x;//collision debug
+                // test1y = bodyB.position.y;//collision debug
+
+                if(bodyA.position.y < lastXCollisiony && (bodyA.position.y - lastXCollisiony)<=16){// 6 -> distance entre le centre d'une tile est le centre du perso(quand il est sur le sol)
                     console.log('onTheFloor')
                     player.onTheFloor = true;
-                }else{
-                    // console.log('collision on the top(head) of the player')
                 }
-            }else{
-                // console.log('out x')
             }
         }
+        // test2x = bodyA.position.x;//collision debug
+        // test2y = bodyA.position.y;//collision debug
     }
 
     this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
@@ -295,10 +294,10 @@ function update(){
     // this.cloth.bodies[0].position.x = player.x-16+12
     // this.cloth.bodies[4].position.x = player.x-16+7
 
-    this.test1.x = test1x;//collision debug
-    this.test1.y = test1y;//collision debug
-    this.test2.x = test2x;//collision debug
-    this.test2.y = test2y;//collision debug
+    // this.test1.x = test1x;//collision debug
+    // this.test1.y = test1y;//collision debug
+    // this.test2.x = test2x;//collision debug
+    // this.test2.y = test2y;//collision debug
     
     //variable vitesse
     if(player.onTheFloor){
@@ -327,3 +326,5 @@ function update(){
         //player.play('jump', true); /*animation de saut pas encore implémentée*/
     }
 }
+
+//Phaser.js (l.69506) pour détecter la collision: Axis Theorem
