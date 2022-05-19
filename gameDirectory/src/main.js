@@ -12,7 +12,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         matter: {
             enableSleeping: false,
             gravity: {
-                y: 1
+                y: 0.6
             },
             debug:false,
             /* debug: {
@@ -301,12 +301,12 @@ function update(){
     
     //variable vitesse
     if(player.onTheFloor){
-        speed_x = 1.5
+        speed_x = 1.2
     }else{
-        speed_x = 1.5
+        speed_x = 1.9
     }
     //variable saut
-    vitesseY = 4
+    vitesseY = 5
 
     
     // Mouvement Horizontal
@@ -321,6 +321,7 @@ function update(){
 
     // Mouvement vertical
     if (keyboard.up.isDown && player.onTheFloor) {
+        keyboard.up.reset();
         player.setVelocityY(-vitesseY);
         player.onTheFloor = false;
         //player.play('jump', true); /*animation de saut pas encore implémentée*/
