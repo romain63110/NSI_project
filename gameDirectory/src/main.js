@@ -327,8 +327,9 @@ function update(){
     }
     if (keyboard.left.isDown) {
         player.setVelocityX(-speed_x);
+        player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
     } else if (keyboard.right.isDown) {
-        player.anims.play('run', true); //on joue l'aniamtion run si on se dirige vers la droite
+        player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
         player.setVelocityX(speed_x);        
     } else{ player.anims.play('idle',true); }
 
