@@ -143,7 +143,9 @@ function preload() {
     this.load.image('background', './src/assets/images/background.png');
 
     //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
-    this.load.spritesheet('player', './src/assets/images/robotSprite.png', { frameWidth: 16, frameHeight: 32 });
+    this.load.spritesheet('playerIdle', './src/assets/images/robotSprite.png', { frameWidth: 16, frameHeight: 32 });
+    //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
+    this.load.spritesheet('playerRun', './src/assets/images/robotSprite_run.png', { frameWidth: 48, frameHeight: 38 });
     // Load body shapes from JSON file generated using PhysicsEditor
     this.load.json('robotShapes', './src/assets/collides/robot_collides_rounded.json');
     //chargement des pixels art de tuiles
@@ -217,15 +219,23 @@ function create(){
     player = player_matter || {};
     player.onTheFloor = true;
     
-    // animation du joueur
+    // animation idle du joueur
     this.anims.create({
         key: 'idle', 
-        frames: this.anims.generateFrameNumbers('player', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frames: this.anims.generateFrameNumbers('playerIdle', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
         frameRate: 10, // six images par seconde
         repeat: -1 //infini
     });
     player.play('idle'); //on joue l'aniamtion
+    
+    this.anims.create({
+        key: 'run',
+        frames: this.anims.generateFrameNumbers('playerRun', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frameRate: 18,
+        repeat: -1
 
+    });
+    player.play('run');
     // const group = this.matter.world.nextGroup(true);
     // const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: true, lineColor: 0x29070D, lineOpacity: 1, fillColor: 0x29070D, fillOpacity:1,} };
     // const constraintOptions = { stiffness: 0.5 };
@@ -301,22 +311,24 @@ function update(){
     
     //variable vitesse
     if(player.onTheFloor){
-        speed_x = 1.2
+        speed_x = 1.2;
     }else{
-        speed_x = 1.9
+        speed_x = 1.9;
     }
     //variable saut
-    vitesseY = 5
+    vitesseY = 5;
 
     
     // Mouvement Horizontal
     if(player.onTheFloor){
         player.setVelocityX(0); // arrête le mouvement de la frame précédente
+        //player.play('idle'); //on joue l'aniamtion idle
     }
     if (keyboard.left.isDown) {
         player.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown) {
         player.setVelocityX(speed_x);
+        
     }
 
     // Mouvement vertical
