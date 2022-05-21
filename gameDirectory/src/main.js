@@ -235,7 +235,8 @@ function create(){
         repeat: -1
 
     });
-    player.play('run');
+    
+
     // const group = this.matter.world.nextGroup(true);
     // const particleOptions = { friction: 0.00001, collisionFilter: { group: group }, render: { visible: true, lineColor: 0x29070D, lineOpacity: 1, fillColor: 0x29070D, fillOpacity:1,} };
     // const constraintOptions = { stiffness: 0.5 };
@@ -322,21 +323,22 @@ function update(){
     // Mouvement Horizontal
     if(player.onTheFloor){
         player.setVelocityX(0); // arrête le mouvement de la frame précédente
-        //player.play('idle'); //on joue l'aniamtion idle
+
     }
     if (keyboard.left.isDown) {
         player.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown) {
-        player.setVelocityX(speed_x);
-        
-    }
+        player.anims.play('run', true); //on joue l'aniamtion run si on se dirige vers la droite
+        player.setVelocityX(speed_x);        
+    } else{ player.anims.play('idle',true); }
+
 
     // Mouvement vertical
     if (keyboard.up.isDown && player.onTheFloor) {
         keyboard.up.reset();
         player.setVelocityY(-vitesseY);
         player.onTheFloor = false;
-        //player.play('jump', true); /*animation de saut pas encore implémentée*/
+        //player.anims.play('jump', true); /*animation de saut pas encore implémentée*/
     }
 }
 
