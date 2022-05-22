@@ -127,10 +127,10 @@ let keyboard; // déclaration de variable, destinée à recevoir les inputs du c
 let player;
 lastXCollisionx = 0;//collision
 lastXCollisiony = 0;//collision
-// test1x = 0;//collision debug
-// test1y = 0;//collision debug
-// test2x = 0;//collision debug
-// test2y = 0;//collision debug
+test1x = 0;//collision debug
+test1y = 0;//collision debug
+test2x = 0;//collision debug
+test2y = 0;//collision debug
 
 function preload() {
     //zoom
@@ -218,6 +218,8 @@ function create(){
 
     player = player_matter || {};
     player.onTheFloor = true;
+    player.collisionRightWall = false;
+    player.collisionLeftWall = false;
     
     // animation idle du joueur
     this.anims.create({
@@ -264,24 +266,42 @@ function create(){
     this.cameras.main.startFollow(player,true,1,0.05);
 
     function collision_detector(bodyA, bodyB){
-        const tolerance = 3;//distance entre le centre est le bord de la colision
-        const demi_largeur_tiles=16/2+tolerance;
+        const collision_player = 3.95;//distance entre le centre est le bord de la colision
+        const demi_largeur_tiles=16/2;
+        const collision_height = 16;
+        const tolerance = 1;
+        
+        test1x = 0;//collision debug
+        test1y = 0;//collision debug
 
         if(bodyA.parent.label == 'robotSprite'){
-            if(bodyB.position.x-demi_largeur_tiles < bodyA.position.x && bodyA.position.x < bodyB.position.x+demi_largeur_tiles){
+            console.log(bodyB.position.x+demi_largeur_tiles+collision_player-bodyA.position.x)
+            //
+            if( bodyA.position.x > bodyB.position.x-demi_largeur_tiles+collision_player && bodyA.position.x < bodyB.position.x){
                 lastXCollisionx = bodyB.position.x;//B
                 lastXCollisiony = bodyB.position.y;//B
-                // test1x = bodyB.position.x;//collision debug
-                // test1y = bodyB.position.y;//collision debug
+                test1x = bodyB.position.x;//collision debug
+                test1y = bodyB.position.y;//collision debug
 
                 if(bodyA.position.y < lastXCollisiony && (bodyA.position.y - lastXCollisiony)<=16){// 6 -> distance entre le centre d'une tile est le centre du perso(quand il est sur le sol)
                     console.log('onTheFloor')
                     player.onTheFloor = true;
                 }
             }
+            if(bodyB.position.y-1 < bodyA.position.y+collision_height+collision_player && bodyB.position.y+1 > bodyA.position.y-collision_height+collision_player){//collision avec un mur detecter
+                // test1x = bodyB.position.x;//collision debug
+                // test1y = bodyB.position.y;//collision debug
+                if(bodyB.position.x < bodyA.position.x){
+                    console.log('left')
+                    player.collisionLeftWall = true;
+                }else if(bodyB.position.x > bodyA.position.x){
+                    console.log('right')
+                    player.collisionRightWall = true;
+                }
+            }
         }
-        // test2x = bodyA.position.x;//collision debug
-        // test2y = bodyA.position.y;//collision debug
+        test2x = bodyA.position.x;//collision debug
+        test2y = bodyA.position.y;//collision debug
     }
 
     this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
@@ -305,10 +325,10 @@ function update(){
     // this.cloth.bodies[0].position.x = player.x-16+12
     // this.cloth.bodies[4].position.x = player.x-16+7
 
-    // this.test1.x = test1x;//collision debug
-    // this.test1.y = test1y;//collision debug
-    // this.test2.x = test2x;//collision debug
-    // this.test2.y = test2y;//collision debug
+    this.test1.x = test1x;//collision debug
+    this.test1.y = test1y;//collision debug
+    this.test2.x = test2x;//collision debug
+    this.test2.y = test2y;//collision debug
     
     //variable vitesse
     if(player.onTheFloor){
@@ -323,14 +343,15 @@ function update(){
     // Mouvement Horizontal
     if(player.onTheFloor){
         player.setVelocityX(0); // arrête le mouvement de la frame précédente
-
     }
-    if (keyboard.left.isDown) {
+    if (keyboard.left.isDown && !player.collisionLeftWall) {
         player.setVelocityX(-speed_x);
+        //player.collisionRightWall = false;
         player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
-    } else if (keyboard.right.isDown) {
+    } else if (keyboard.right.isDown && !player.collisionRightWall) {
         player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
-        player.setVelocityX(speed_x);        
+        player.setVelocityX(speed_x);
+        //player.collisionLeftWall = false;     
     } else{ player.anims.play('idle',true); }
 
 
@@ -341,6 +362,9 @@ function update(){
         player.onTheFloor = false;
         //player.anims.play('jump', true); /*animation de saut pas encore implémentée*/
     }
+    //player.onTheFloor = false;
+    player.collisionRightWall = false;
+    player.collisionLeftWall = false;
 }
 
 //Phaser.js (l.69506) pour détecter la collision: Axis Theorem
