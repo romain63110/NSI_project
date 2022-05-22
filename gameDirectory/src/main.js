@@ -182,6 +182,10 @@ function create(){
     for(i=0;i<=max_y;i++){
         cables[i]=[];
     }
+    var spikes = [];
+    for(i=0;i<=max_y;i++){
+        spikes[i]=[];
+    }
 
     function moreMap(self,xindex,yindex,tilemapKey,collision){
         //ajout de la map
@@ -193,6 +197,8 @@ function create(){
         platforms[yindex][xindex] = map[yindex][xindex].createLayer('platforms', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
         //                                                         x   y
         cables[yindex][xindex] = map[yindex][xindex].createLayer('cables', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
+        //                                                         x   y
+        spikes[yindex][xindex] = map[yindex][xindex].createLayer('spikes', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
 
         if(collision){
             // ajouter de la collision:
