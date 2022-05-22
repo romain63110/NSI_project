@@ -15,7 +15,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
                 y: 0.6
             },
             debug:false,
-            /* debug: {
+            /*debug: {
                 showAxes: false,
                 showAngleIndicator: true,
                 angleColor: 0xe81153,
@@ -275,20 +275,19 @@ function create(){
         test1y = 0;//collision debug
 
         if(bodyA.parent.label == 'robotSprite'){
-            console.log(bodyB.position.x+demi_largeur_tiles+collision_player-bodyA.position.x)
             //
-            if( bodyA.position.x > bodyB.position.x-demi_largeur_tiles+collision_player && bodyA.position.x < bodyB.position.x){
+            if( bodyB.position.x-demi_largeur_tiles-collision_player-tolerance < bodyA.position.x && bodyA.position.x < bodyB.position.x+demi_largeur_tiles+collision_player+tolerance){
                 lastXCollisionx = bodyB.position.x;//B
                 lastXCollisiony = bodyB.position.y;//B
-                test1x = bodyB.position.x;//collision debug
-                test1y = bodyB.position.y;//collision debug
+                // test1x = bodyB.position.x;//collision debug
+                // test1y = bodyB.position.y;//collision debug
 
                 if(bodyA.position.y < lastXCollisiony && (bodyA.position.y - lastXCollisiony)<=16){// 6 -> distance entre le centre d'une tile est le centre du perso(quand il est sur le sol)
                     console.log('onTheFloor')
                     player.onTheFloor = true;
                 }
             }
-            if(bodyB.position.y-1 < bodyA.position.y+collision_height+collision_player && bodyB.position.y+1 > bodyA.position.y-collision_height+collision_player){//collision avec un mur detecter
+            if(bodyB.position.y < bodyA.position.y+collision_height+collision_player+2 && bodyB.position.y > bodyA.position.y-collision_height+collision_player-2){//collision avec un mur detecter
                 // test1x = bodyB.position.x;//collision debug
                 // test1y = bodyB.position.y;//collision debug
                 if(bodyB.position.x < bodyA.position.x){
@@ -300,8 +299,8 @@ function create(){
                 }
             }
         }
-        test2x = bodyA.position.x;//collision debug
-        test2y = bodyA.position.y;//collision debug
+        // test2x = bodyA.position.x;//collision debug
+        // test2y = bodyA.position.y;//collision debug
     }
 
     this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
