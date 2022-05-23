@@ -12,10 +12,10 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         matter: {
             enableSleeping: false,
             gravity: {
-                y: 0.6
+                y: 0.7
             },
             debug:false,
-            /*debug: {
+			/*debug: {
                 showAxes: false,
                 showAngleIndicator: true,
                 angleColor: 0xe81153,
@@ -79,7 +79,10 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
     
                 showConvexHulls: true,
                 hullColor: 0xd703d0
-            }*/
+				
+				gameInfo: true
+				gameTimeInfo: true*/
+            }
         }
     },
     input: {
@@ -337,7 +340,7 @@ function update(){
     
     //variable vitesse
     if(player.onTheFloor){
-        speed_x = 1.2;
+        speed_x = 1.4;
     }else{
         speed_x = 1.9;
     }
