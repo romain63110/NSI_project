@@ -15,74 +15,74 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
                 y: 0.7
             },
             debug: false,
-			/*debug: {
-                // showAxes: false,
-                // showAngleIndicator: true,
-                // angleColor: 0xe81153,
+			debug: {
+                showAxes: false,
+                showAngleIndicator: true,
+                angleColor: 0xe81153,
 
-                // showBroadphase: false,
-                // broadphaseColor: 0xffb400,
+                showBroadphase: false,
+                broadphaseColor: 0xffb400,
 
-                // showBounds: false,
-                // boundsColor: 0xffffff,
+                showBounds: false,
+                boundsColor: 0xffffff,
 
-                // showVelocity: true,
-                // velocityColor: 0x00aeef,
+                showVelocity: true,
+                velocityColor: 0x00aeef,
 
-                // showCollisions: true,
-                // collisionColor: 0xf5950c,
+                showCollisions: true,
+                collisionColor: 0xf5950c,
     
-                // showSeparations: false,
-                // separationColor: 0xffa500,
+                showSeparations: false,
+                separationColor: 0xffa500,
 
-                // showBody: true,
-                // showStaticBody: true,
-                // showInternalEdges: true,
+                showBody: true,
+                showStaticBody: true,
+                showInternalEdges: true,
 
-                // renderFill: false,
-                // renderLine: true,
+                renderFill: false,
+                renderLine: true,
     
-                // fillColor: 0x106909,
-                // fillOpacity: 1,
-                // lineColor: 0x28de19,
-                // lineOpacity: 1,
-                // lineThickness: 1,
+                fillColor: 0x106909,
+                fillOpacity: 1,
+                lineColor: 0x28de19,
+                lineOpacity: 1,
+                lineThickness: 1,
     
-                // staticFillColor: 0x0d177b,
-                // staticLineColor: 0x1327e4,
+                staticFillColor: 0x0d177b,
+                staticLineColor: 0x1327e4,
 
-                // showSleeping: true,
-                // staticBodySleepOpacity: 1,
-                // sleepFillColor: 0x464646,
-                // sleepLineColor: 0x999a99,
+                showSleeping: true,
+                staticBodySleepOpacity: 1,
+                sleepFillColor: 0x464646,
+                sleepLineColor: 0x999a99,
     
-                // showSensors: true,
-                // sensorFillColor: 0x0d177b,
-                // sensorLineColor: 0x1327e4,
+                showSensors: true,
+                sensorFillColor: 0x0d177b,
+                sensorLineColor: 0x1327e4,
     
-                // showPositions: true,
-                // positionSize: 4,
-                // positionColor: 0xe042da,
+                showPositions: true,
+                positionSize: 4,
+                positionColor: 0xe042da,
     
-                // showJoint: true,
-                // jointColor: 0xe0e042,
-                // jointLineOpacity: 1,
-                // jointLineThickness: 2,
+                showJoint: true,
+                jointColor: 0xe0e042,
+                jointLineOpacity: 1,
+                jointLineThickness: 2,
     
-                // pinSize: 4,
-                // pinColor: 0x42e0e0,
+                pinSize: 4,
+                pinColor: 0x42e0e0,
     
-                // springColor: 0xe042e0,
+                springColor: 0xe042e0,
     
-                // anchorColor: 0xefefef,
-                // anchorSize: 4,
+                anchorColor: 0xefefef,
+                anchorSize: 4,
     
-                // showConvexHulls: true,
-                // hullColor: 0xd703d0,
+                showConvexHulls: true,
+                hullColor: 0xd703d0,
 				
-				// gameInfo: true,
-				// gameTimeInfo: true
-            }*/
+				gameInfo: true,
+				gameTimeInfo: true
+            }
         }
     },
     input: {
@@ -274,42 +274,52 @@ function create(){
     // Camera centrée sur le personnage
     this.cameras.main.startFollow(player,true,1,0.05);
 
+    function detectOnTheFloor(Ax,Ay,Bx,By,demi_collision_box,demi_largeur_tiles,tolerance){
+        if( Bx-demi_largeur_tiles-demi_collision_box-tolerance < Ax && Ax < Bx+demi_largeur_tiles+demi_collision_box+tolerance){
+            lastXCollisionx = Bx;
+            lastXCollisiony = By;
+            // test1x = Bx;//collision debug
+            // test1y = By;//collision debug
+        }
+        if(Ay < lastXCollisiony && (Ay - lastXCollisiony)<=16){// 6 -> distance entre le centre d'une tile est le centre du perso(quand il est sur le sol)
+            console.log('onTheFloor')
+            return true;
+        }
+    }
+
     function collision_detector(bodyA, bodyB){
-        const collision_player = 3.95;//distance entre le centre est le bord de la colision
+        const demi_collision_box = 3.95;//distance entre le centre est le bord de la colision
         const demi_largeur_tiles=16/2;
         const collision_height = 16;
         const tolerance = 1;
         
         test1x = 0;//collision debug
         test1y = 0;//collision debug
-
+        console.log(bodyA.parent.label,bodyB.parent.label)
         if(bodyA.parent.label == 'robotSprite'){
             //
-            if( bodyB.position.x-demi_largeur_tiles-collision_player-tolerance < bodyA.position.x && bodyA.position.x < bodyB.position.x+demi_largeur_tiles+collision_player+tolerance){
-                lastXCollisionx = bodyB.position.x;//B
-                lastXCollisiony = bodyB.position.y;//B
-                // test1x = bodyB.position.x;//collision debug
-                // test1y = bodyB.position.y;//collision debug
+            player.onTheFloor = detectOnTheFloor(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
 
-                if(bodyA.position.y < lastXCollisiony && (bodyA.position.y - lastXCollisiony)<=16){// 6 -> distance entre le centre d'une tile est le centre du perso(quand il est sur le sol)
-                    console.log('onTheFloor')
-                    player.onTheFloor = true;
-                }
-            }
-            if(bodyB.position.y < bodyA.position.y+collision_height+collision_player+2 && bodyB.position.y > bodyA.position.y-collision_height+collision_player-2){//collision avec un mur detecter
-                // test1x = bodyB.position.x;//collision debug
-                // test1y = bodyB.position.y;//collision debug
+            if(bodyB.position.y < bodyA.position.y+collision_height && bodyB.position.y > bodyA.position.y-collision_height){//collision avec un mur detecter
+                test1x = bodyB.position.x;//collision debug
+                test1y = bodyB.position.y;//collision debug
                 if(bodyB.position.x < bodyA.position.x){
                     console.log('left')
+                    player.anims.play('idle',true); 
                     player.collisionLeftWall = true;
                 }else if(bodyB.position.x > bodyA.position.x){
                     console.log('right')
+                    player.anims.play('idle',true); 
                     player.collisionRightWall = true;
                 }
+            }else{
+                console.log('reset reset reset')
+                player.collisionLeftWall = false;
+                player.collisionRightWall = false;
             }
         }
-        // test2x = bodyA.position.x;//collision debug
-        // test2y = bodyA.position.y;//collision debug
+        test2x = bodyB.position.x;//collision debug
+        test2y = bodyB.position.y;//collision debug
     }
 
     this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
@@ -318,6 +328,22 @@ function create(){
     this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
         collision_detector(bodyA, bodyB);
     });
+
+    
+    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16*4, 'enemy','enemySprite').setOrigin(0.5,0.5);
+    enemy_matter.setScale(1) //taille du joueur
+    enemy_matter.setFixedRotation() //
+    enemy_matter.setFriction(0)
+
+    // animation idle de l'enemie
+    // this.anims.create({
+    //     key: 'idle', 
+    //     frames: this.anims.generateFrameNumbers('playerIdle', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+    //     frameRate: 10, // six images par seconde
+    //     repeat: -1 //infini
+    // });
+    // enemy_matter.play('idle'); //on joue l'aniamtion
+
 
     //debug
     this.test1 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
@@ -352,12 +378,16 @@ function update(){
     if(player.onTheFloor){
         player.setVelocityX(0); // arrête le mouvement de la frame précédente
     }
-    if (keyboard.left.isDown && !player.collisionLeftWall) {
-        player.setVelocityX(-speed_x);
+    if (keyboard.left.isDown /*&& !player.collisionLeftWall*/) {
         //player.collisionRightWall = false;
-        player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
-    } else if (keyboard.right.isDown && !player.collisionRightWall) {
-        player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
+        if(!player.collisionLeftWall){
+            player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
+        }
+        player.setVelocityX(-speed_x);
+    } else if (keyboard.right.isDown /*&& !player.collisionRightWall*/) {
+        if(!player.collisionRightWall){
+            player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
+        }
         player.setVelocityX(speed_x);
         //player.collisionLeftWall = false;     
     } else{ player.anims.play('idle',true); }
@@ -365,14 +395,12 @@ function update(){
 
     // Mouvement vertical
     if (keyboard.up.isDown && player.onTheFloor) {
-        keyboard.up.reset();
+        //keyboard.up.reset();
         player.setVelocityY(-vitesseY);
         player.onTheFloor = false;
         //player.anims.play('jump', true); /*animation de saut pas encore implémentée*/
     }
     //player.onTheFloor = false;
-    player.collisionRightWall = false;
-    player.collisionLeftWall = false;
 }
 
 //Phaser.js (l.69506) pour détecter la collision: Axis Theorem
