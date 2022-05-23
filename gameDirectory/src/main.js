@@ -15,7 +15,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
                 y: 0.7
             },
             debug: false,
-			debug: {
+			/*debug: {
                 // showAxes: false,
                 // showAngleIndicator: true,
                 // angleColor: 0xe81153,
@@ -82,7 +82,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
 				
 				// gameInfo: true,
 				// gameTimeInfo: true
-            }
+            }*/
         }
     },
     input: {
