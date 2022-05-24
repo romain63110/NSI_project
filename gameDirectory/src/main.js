@@ -146,8 +146,10 @@ function preload() {
     //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
     this.load.spritesheet('playerRun', './src/assets/images/robotSprite_run.png', { frameWidth: 48, frameHeight: 38 });
 
-    //chargement du spritesheet du ennemi (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
-    this.load.spritesheet('enemyRun', './src/assets/images/spritesheetArachnobot3-sheet.png', { frameWidth: 64, frameHeight: 48 });
+    //chargement du spritesheet de l'ennemi (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
+    this.load.spritesheet('enemyRunR', './src/assets/images/spritesheetArachnobot3-sheet.png', { frameWidth: 64, frameHeight: 48 });  //anim course droite
+    this.load.spritesheet('enemyRunL', './src/assets/images/gameDirectory/spritesheetArachnobot3-sheet_movingLeft.png', { frameWidth: 64, frameHeight: 48 });  //anim course gauche
+    this.load.spritesheet('enemyIdle', './src/assets/images/spritesheetArachnobot_Idle.png', { frameWidth: 64, frameHeight: 48 });  //anim passive
 
     // Load body shapes from JSON file generated using PhysicsEditor
     this.load.json('robotShapes', './src/assets/collides/robot_collides_rounded.json');
@@ -362,16 +364,23 @@ function create(){
     
     // animation attaque/mouvement de l'ennemi
     this.anims.create({
-        key: 'enemyRunAnimation',
-        frames: this.anims.generateFrameNumbers('enemyRun', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ] }),//frames animées
-        frameRate: 18,
+        key: 'enemyIdleAnimation',
+        frames: this.anims.generateFrameNumbers('enemyIdle', { frames:  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40] }),//frames animées
+        frameRate: 12,
         repeat: -1
 
     });
     this.anims.create({
-        key: 'enemyIdleAnimation',
-        frames: this.anims.generateFrameNumbers('enemyIdle', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
-        frameRate: 18,
+        key: 'enemyRunRightAnimation',
+        frames: this.anims.generateFrameNumbers('enemyRunR', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frameRate: 12,
+        repeat: -1
+
+    });
+    this.anims.create({
+        key: 'enemyRunLeftAnimation',
+        frames: this.anims.generateFrameNumbers('enemyRunL', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frameRate: 12,
         repeat: -1
 
     });
