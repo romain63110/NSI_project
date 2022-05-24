@@ -348,10 +348,10 @@ function create(){
     enemy.collisionLeftWall = false;
 
     function enemy_collision_detector(bodyA, bodyB){
-        const demi_collision_box = 7.336;//distance entre le centre est le bord de la colision
-        const demi_largeur_tiles=16/2;
-        const collision_height = 4.7095;//hauteur de l'origine du perso
-        const tolerance = 1;
+        const demi_collision_box = 7.336;//distance entre le centre est le bord de la colision   //detectOnTheFloor
+        const demi_largeur_tiles=16/2;                                                           //detectOnTheFloor
+        const collision_height = 7.336;//hauteur de l'origine du perso                           //detectWallCollision
+        const tolerance = 1;                                                                     //detectOnTheFloor
         
         // //console.log(bodyA.parent.label)
         if(bodyB.parent.label == 'enemySprite'){
@@ -360,6 +360,7 @@ function create(){
             detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;},(val)=>{enemy.collisionRightWall = val;})
             console.log("collisionLeftWall  "+enemy.collisionLeftWall)
             console.log("collisionRightWall  "+enemy.collisionRightWall)
+            console.log("onTheFloor  "+enemy.onTheFloor)
         }
     }
     
