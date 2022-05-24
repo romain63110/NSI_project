@@ -1,0 +1,47 @@
+{
+	"generator_info": "Shape definitions generated with PhysicsEditor. Visit https://www.codeandweb.com/physicseditor",
+	"enemySprite": {
+		"type": "fromPhysicsEditor",
+		"label": "enemySprite",
+		"isStatic": false,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 255
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":33, "y":0 }, { "x":30, "y":4 }, { "x":36, "y":4 } ],
+					[ { "x":54, "y":46 }, { "x":58, "y":27 }, { "x":54, "y":9 }, { "x":49, "y":9 }, { "x":18, "y":11 }, { "x":22, "y":48 }, { "x":38, "y":48 } ],
+					[ { "x":9, "y":45 }, { "x":22, "y":48 }, { "x":18, "y":11 }, { "x":12, "y":11 }, { "x":7, "y":22 } ],
+					[ { "x":47, "y":4 }, { "x":30, "y":4 }, { "x":18, "y":11 }, { "x":49, "y":9 } ],
+					[ { "x":18, "y":8 }, { "x":18, "y":11 }, { "x":30, "y":4 }, { "x":24, "y":4 } ]
+				]
+			}
+		]
+	},
+	"enemy_collision": {
+		"type": "fromPhysicsEditor",
+		"label": "enemy_collision",
+		"isStatic": false,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 255
+		},
+		"fixtures": []
+	}
+}

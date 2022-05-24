@@ -145,8 +145,14 @@ function preload() {
     this.load.spritesheet('playerIdle', './src/assets/images/robotSprite.png', { frameWidth: 16, frameHeight: 32 });
     //chargement du spritesheet du joueur (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
     this.load.spritesheet('playerRun', './src/assets/images/robotSprite_run.png', { frameWidth: 48, frameHeight: 38 });
+
+    //chargement du spritesheet du ennemi (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
+    this.load.spritesheet('enemyRun', './src/assets/images/spritesheetArachnobot3-sheet.png', { frameWidth: 64, frameHeight: 48 });
+
     // Load body shapes from JSON file generated using PhysicsEditor
     this.load.json('robotShapes', './src/assets/collides/robot_collides_rounded.json');
+    // Load body shapes from JSON file generated using PhysicsEditor
+    this.load.json('enemyShapes', './src/assets/collides/enemy_collision.json');
     //chargement des pixels art de tuiles
     this.load.image('tilesPng', './src/assets/tiles/tilesets.png');
     //chargement de la carte de tuile réalisée via Tiled
@@ -270,13 +276,14 @@ function create(){
     // Camera centrée sur le personnage
     this.cameras.main.startFollow(player,true,1,0.05);
 
+    //collsion x,y objet en mouvement , x,y objet statique
     function detectOnTheFloor(Ax,Ay,Bx,By,demi_collision_box,demi_largeur_tiles,tolerance){
         if( Bx-demi_largeur_tiles-demi_collision_box-tolerance < Ax && Ax < Bx+demi_largeur_tiles+demi_collision_box+tolerance){//BodyA
             lastXCollisionx = Bx;
             lastXCollisiony = By;
         }
-        if(Ay < lastXCollisiony && (Ay - lastXCollisiony)<=16){// 6 -> distance entre le centre d'une tile est le centre du perso(quand il est sur le sol)
-            console.log('onTheFloor')
+        if(Ay < lastXCollisiony && (Ay - lastXCollisiony)<=16){// 16 -> distance entre le centre d'une tile est le centre du perso(quand il est sur le sol)
+            // console.log('onTheFloor')
             return true;
         }
     }
@@ -284,57 +291,81 @@ function create(){
     function detectWallCollision(Ax,Ay,Bx,By,collision_height,setCollisionLeftWall,setCollisionRightWall){
         if(By < Ay+collision_height && By > Ay-collision_height){//collision avec un mur detecter
             if(Bx < Ax){
-                console.log('left')
-                player.anims.play('idle',true);
+                // console.log('left')
                 setCollisionLeftWall(true)
             }else if(Bx > Ax){
-                console.log('right')
-                player.anims.play('idle',true);
+                // console.log('right')
                 setCollisionRightWall(true)
             }
         }else{
-            console.log('reset reset reset')
+            // console.log('reset reset reset')
             setCollisionLeftWall(false)
             setCollisionRightWall(false)
         }
     }
 
-    function collision_detector(bodyA, bodyB){
+    function player_collision_detector(bodyA, bodyB){
+        const demi_collision_box = 3.95;//distance entre le centre est le bord de la colision
+        const demi_largeur_tiles=16/2;
+        const collision_height = 16;//tiles height
+        const tolerance = 1;
+
+        if(bodyA.parent.label == 'robotSprite'){
+
+            player.onTheFloor = detectOnTheFloor(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
+            detectWallCollision(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,collision_height,(val)=>{player.collisionLeftWall = val;player.anims.play('idle',true);},(val)=>{player.collisionRightWall = val;player.anims.play('idle',true);})
+            
+        }
+    }
+
+    function onCollisionDetected(bodyA, bodyB){
+        console.log(bodyA.label+"   "+bodyB.label)
+        player_collision_detector(bodyA, bodyB);
+        enemy_collision_detector(bodyA, bodyB);
+    }
+
+    this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
+        onCollisionDetected(bodyA, bodyB);
+    });
+    this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
+        onCollisionDetected(bodyA, bodyB);
+    });
+
+    // collision du joueur
+    var enemy_shapes = this.cache.json.get('enemyShapes');
+    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16*4, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
+    enemy_matter.setScale(0.5) //taille de l'ennemi
+    enemy_matter.setFixedRotation() //
+    enemy_matter.setFriction(0)
+
+    enemy = player_matter || {};
+    enemy.onTheFloor = true;
+    enemy.collisionRightWall = false;
+    enemy.collisionLeftWall = false;
+
+    function enemy_collision_detector(bodyA, bodyB){
         const demi_collision_box = 3.95;//distance entre le centre est le bord de la colision
         const demi_largeur_tiles=16/2;
         const collision_height = 16;//tiles height
         const tolerance = 1;
         
-        console.log(bodyA.parent.label,bodyB.parent.label)
-        if(bodyA.parent.label == 'robotSprite'){
+        // //console.log(bodyA.parent.label)
+        if(bodyB.parent.label == 'enemySprite'){
 
-            player.onTheFloor = detectOnTheFloor(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
-            detectWallCollision(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,collision_height,(val)=>{player.collisionLeftWall = val;},(val)=>{player.collisionRightWall = val;})
+            // enemy.onTheFloor = detectOnTheFloor(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
+            // detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;/*console.log('left');*/},(val)=>{enemy.collisionRightWall = val;/*console.log('right');*/})
+            
         }
     }
+    // animation idle de l'ennemi
+    this.anims.create({
+        key: 'enemyRunAnimation',
+        frames: this.anims.generateFrameNumbers('enemyRun', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frameRate: 18,
+        repeat: -1
 
-    this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
-        collision_detector(bodyA, bodyB);
     });
-    this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-        collision_detector(bodyA, bodyB);
-    });
-
-    
-    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16*4, 'enemy','enemySprite').setOrigin(0.5,0.5);
-    enemy_matter.setScale(1) //taille du joueur
-    enemy_matter.setFixedRotation() //
-    enemy_matter.setFriction(0)
-
-    // animation idle de l'enemie
-    // this.anims.create({
-    //     key: 'idle', 
-    //     frames: this.anims.generateFrameNumbers('playerIdle', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
-    //     frameRate: 10, // six images par seconde
-    //     repeat: -1 //infini
-    // });
-    // enemy_matter.play('idle'); //on joue l'aniamtion
-
+    enemy_matter.play('enemyRunAnimation'); //on joue l'aniamtion
 
     //debug
     console.log(this);
