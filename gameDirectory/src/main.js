@@ -130,10 +130,6 @@ let keyboard; // déclaration de variable, destinée à recevoir les inputs du c
 let player;
 lastXCollisionx = 0;//collision
 lastXCollisiony = 0;//collision
-test1x = 0;//collision debug
-test1y = 0;//collision debug
-test2x = 0;//collision debug
-test2y = 0;//collision debug
 
 function preload() {
     //zoom
@@ -275,11 +271,9 @@ function create(){
     this.cameras.main.startFollow(player,true,1,0.05);
 
     function detectOnTheFloor(Ax,Ay,Bx,By,demi_collision_box,demi_largeur_tiles,tolerance){
-        if( Bx-demi_largeur_tiles-demi_collision_box-tolerance < Ax && Ax < Bx+demi_largeur_tiles+demi_collision_box+tolerance){
+        if( Bx-demi_largeur_tiles-demi_collision_box-tolerance < Ax && Ax < Bx+demi_largeur_tiles+demi_collision_box+tolerance){//BodyA
             lastXCollisionx = Bx;
             lastXCollisiony = By;
-            // test1x = Bx;//collision debug
-            // test1y = By;//collision debug
         }
         if(Ay < lastXCollisiony && (Ay - lastXCollisiony)<=16){// 6 -> distance entre le centre d'une tile est le centre du perso(quand il est sur le sol)
             console.log('onTheFloor')
@@ -287,39 +281,36 @@ function create(){
         }
     }
 
+    function detectWallCollision(Ax,Ay,Bx,By,collision_height,setCollisionLeftWall,setCollisionRightWall){
+        if(By < Ay+collision_height && By > Ay-collision_height){//collision avec un mur detecter
+            if(Bx < Ax){
+                console.log('left')
+                player.anims.play('idle',true);
+                setCollisionLeftWall(true)
+            }else if(Bx > Ax){
+                console.log('right')
+                player.anims.play('idle',true);
+                setCollisionRightWall(true)
+            }
+        }else{
+            console.log('reset reset reset')
+            setCollisionLeftWall(false)
+            setCollisionRightWall(false)
+        }
+    }
+
     function collision_detector(bodyA, bodyB){
         const demi_collision_box = 3.95;//distance entre le centre est le bord de la colision
         const demi_largeur_tiles=16/2;
-        const collision_height = 16;
+        const collision_height = 16;//tiles height
         const tolerance = 1;
         
-        test1x = 0;//collision debug
-        test1y = 0;//collision debug
         console.log(bodyA.parent.label,bodyB.parent.label)
         if(bodyA.parent.label == 'robotSprite'){
-            //
-            player.onTheFloor = detectOnTheFloor(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
 
-            if(bodyB.position.y < bodyA.position.y+collision_height && bodyB.position.y > bodyA.position.y-collision_height){//collision avec un mur detecter
-                test1x = bodyB.position.x;//collision debug
-                test1y = bodyB.position.y;//collision debug
-                if(bodyB.position.x < bodyA.position.x){
-                    console.log('left')
-                    player.anims.play('idle',true); 
-                    player.collisionLeftWall = true;
-                }else if(bodyB.position.x > bodyA.position.x){
-                    console.log('right')
-                    player.anims.play('idle',true); 
-                    player.collisionRightWall = true;
-                }
-            }else{
-                console.log('reset reset reset')
-                player.collisionLeftWall = false;
-                player.collisionRightWall = false;
-            }
+            player.onTheFloor = detectOnTheFloor(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
+            detectWallCollision(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,collision_height,(val)=>{player.collisionLeftWall = val;},(val)=>{player.collisionRightWall = val;})
         }
-        test2x = bodyB.position.x;//collision debug
-        test2y = bodyB.position.y;//collision debug
     }
 
     this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
@@ -346,8 +337,6 @@ function create(){
 
 
     //debug
-    this.test1 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
-    this.test2 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
     console.log(this);
     console.log(player);
     console.log(this.test1);
@@ -358,11 +347,6 @@ function update(){
 
     // this.cloth.bodies[0].position.x = player.x-16+12
     // this.cloth.bodies[4].position.x = player.x-16+7
-
-    this.test1.x = test1x;//collision debug
-    this.test1.y = test1y;//collision debug
-    this.test2.x = test2x;//collision debug
-    this.test2.y = test2y;//collision debug
     
     //variable vitesse
     if(player.onTheFloor){
