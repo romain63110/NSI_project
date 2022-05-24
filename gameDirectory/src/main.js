@@ -319,7 +319,7 @@ function create(){
     }
 
     function onCollisionDetected(bodyA, bodyB){
-        console.log(bodyA.label+"   "+bodyB.label)
+        //console.log(bodyA.label+"   "+bodyB.label)
         player_collision_detector(bodyA, bodyB);
         enemy_collision_detector(bodyA, bodyB);
     }
@@ -338,7 +338,7 @@ function create(){
     enemy_matter.setFixedRotation() //
     enemy_matter.setFriction(0)
 
-    enemy = player_matter || {};
+    enemy = enemy_matter || {};
     enemy.onTheFloor = true;
     enemy.collisionRightWall = false;
     enemy.collisionLeftWall = false;
@@ -352,8 +352,8 @@ function create(){
         // //console.log(bodyA.parent.label)
         if(bodyB.parent.label == 'enemySprite'){
 
-            // enemy.onTheFloor = detectOnTheFloor(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
-            // detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;/*console.log('left');*/},(val)=>{enemy.collisionRightWall = val;/*console.log('right');*/})
+            enemy.onTheFloor = detectOnTheFloor(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
+            detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;/*console.log('left');*/},(val)=>{enemy.collisionRightWall = val;/*console.log('right');*/})
             
         }
     }
@@ -387,6 +387,8 @@ function update(){
     }
     //variable saut
     vitesseY = 5;
+
+    enemy_matter.setVelocityY(-0.1);
 
     
     // Mouvement Horizontal
