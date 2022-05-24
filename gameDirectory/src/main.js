@@ -291,9 +291,10 @@ function create(){
     }
 
     function detectWallCollision(Ax,Ay,Bx,By,collision_height,setCollisionLeftWall,setCollisionRightWall){
-        if(By < Ay+collision_height && By > Ay-collision_height){//collision avec un mur detecter
+        //console.log(By-Ay-collision_height-(By-Ay+collision_height)/2)
+        if(Ay+collision_height > By && By > Ay-collision_height){//collision avec un mur detecter
             if(Bx < Ax){
-                // console.log('left')
+                //console.log('left')
                 setCollisionLeftWall(true)
             }else if(Bx > Ax){
                 // console.log('right')
@@ -335,10 +336,11 @@ function create(){
 
     // collision du joueur
     var enemy_shapes = this.cache.json.get('enemyShapes');
-    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16*4, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
-    enemy_matter.setScale(0.5) //taille de l'ennemi
-    enemy_matter.setFixedRotation() //
-    enemy_matter.setFriction(0)
+    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16*4, 2*20*16+18*16-16*4, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
+    enemy_matter.setScale(0.5); //taille de l'ennemi
+    enemy_matter.setFixedRotation(); //
+    enemy_matter.setFriction(0);
+    enemy_matter.setVelocityX(1);
 
     enemy = enemy_matter || {};
     enemy.onTheFloor = true;
@@ -346,17 +348,18 @@ function create(){
     enemy.collisionLeftWall = false;
 
     function enemy_collision_detector(bodyA, bodyB){
-        const demi_collision_box = 3.95;//distance entre le centre est le bord de la colision
+        const demi_collision_box = 7.336;//distance entre le centre est le bord de la colision
         const demi_largeur_tiles=16/2;
-        const collision_height = 16;//tiles height
+        const collision_height = 4.7095;//hauteur de l'origine du perso
         const tolerance = 1;
         
         // //console.log(bodyA.parent.label)
         if(bodyB.parent.label == 'enemySprite'){
 
             enemy.onTheFloor = detectOnTheFloor(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
-            detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;/*console.log('left');*/},(val)=>{enemy.collisionRightWall = val;/*console.log('right');*/})
-            
+            detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;},(val)=>{enemy.collisionRightWall = val;})
+            console.log("collisionLeftWall  "+enemy.collisionLeftWall)
+            console.log("collisionRightWall  "+enemy.collisionRightWall)
         }
     }
     
@@ -407,7 +410,11 @@ function update(){
     //variable saut
     vitesseY = 5;
 
-    enemy_matter.setVelocityY(-0.1);
+    if(enemy.collisionRightWall){// touche le mur droit
+        enemy_matter.setVelocityX(-1);
+    }else if(!enemy.collisionRightWall){// touche le mur gauche
+        enemy_matter.setVelocityX(1);
+    }
 
     
     // Mouvement Horizontal
