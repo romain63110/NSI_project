@@ -244,7 +244,7 @@ function create(){
     this.anims.create({
         key: 'run',
         frames: this.anims.generateFrameNumbers('playerRun', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
-        frameRate: 18,
+        frameRate: 6,
         repeat: -1
 
     });
@@ -357,15 +357,25 @@ function create(){
             
         }
     }
-    // animation idle de l'ennemi
+    
+    
+    
+    // animation attaque/mouvement de l'ennemi
     this.anims.create({
         key: 'enemyRunAnimation',
-        frames: this.anims.generateFrameNumbers('enemyRun', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frames: this.anims.generateFrameNumbers('enemyRun', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ] }),//frames animées
         frameRate: 18,
         repeat: -1
 
     });
-    enemy_matter.play('enemyRunAnimation'); //on joue l'aniamtion
+    this.anims.create({
+        key: 'enemyIdleAnimation',
+        frames: this.anims.generateFrameNumbers('enemyIdle', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frameRate: 18,
+        repeat: -1
+
+    });
+    enemy_matter.anims.play('enemyRunAnimation',true); //on joue l'aniamtion
 
     //debug
     console.log(this);
@@ -420,4 +430,3 @@ function update(){
     //player.onTheFloor = false;
 }
 
-//Phaser.js (l.69506) pour détecter la collision: Axis Theorem
