@@ -126,15 +126,25 @@ HUD.prototype = {
     create: function ()
     {
         this.playButton = this.add.image(innerWidth / 2, innerHeight / 3.5, 'playImg').setScale(3, 3);
+        this.playButton.setInteractive();
+
         this.resumeButton = this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeImg').setScale(3, 3);
+        this.resumeButton.setInteractive();
+
         this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsImg').setScale(3, 3);
         this.settingsButton.setInteractive();
     },
 
     update: function () 
-    {
-        this.settingsButton.on('pointerover', () => { console.log('pointeur dessus'); this.settingsButton.setTexture('settingsImgPressed'); });
+    {   //changements de texture au survol des boutons
+        this.settingsButton.on('pointerover', () => { console.log('pointeur dessus'); this.settingsButton.setTexture('settingsImgPressed'); }); 
         this.settingsButton.on('pointerout', () => { console.log('pointeur parti :( '); this.settingsButton.setTexture('settingsImg'); });
+
+        this.resumeButton.on('pointerover', () => { console.log('pointeur dessus'); this.resumeButton.setTexture('resumeImgPressed'); });
+        this.resumeButton.on('pointerout', () => { console.log('pointeur parti :( '); this.resumeButton.setTexture('resumeImg'); });
+
+        this.playButton.on('pointerover', () => { console.log('pointeur dessus'); this.playButton.setTexture('playImgPressed'); });
+        this.playButton.on('pointerout', () => { console.log('pointeur parti :( '); this.playButton.setTexture('playImg'); });
     }
 
     
