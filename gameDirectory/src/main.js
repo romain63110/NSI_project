@@ -89,7 +89,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         gamepad: true // fonctionalité à venir : prise en charge de manette
     },
     pixelArt: true, //retire l'anti aliasing pour éviter un effet de flou sur le pixel art
-    zoom: 1,
+    zoom: 3,
     scale: {
         mode: Phaser.Scale.RESIZE, // fenetre adaptive
     },
@@ -268,6 +268,15 @@ function create(){
             var i = 0;
             var new_tile = "";
             while(new_tile != null){
+                new_tile = spikes[yindex][xindex].findByIndex(226,i)
+                if(new_tile != null){
+                    list_of_spikes_tiles.push(new_tile)
+                }
+                i++;
+            }
+            var i = 0;
+            var new_tile = "";
+            while(new_tile != null){
                 new_tile = spikes[yindex][xindex].findByIndex(227,i)
                 if(new_tile != null){
                     list_of_spikes_tiles.push(new_tile)
@@ -275,14 +284,9 @@ function create(){
                 i++;
             }
             //ajout de la collision avec les pics
-            if(list_of_spikes_tiles.length < 0){
-                console.log(list_of_spikes_tiles);
-                this.matter.add.rectangle(xindex*16*40, yindex*16*20, 500, 100,0x6666ff, { 
-                    restitution: 0.9,
-                    isSensor: true,
-                    angle: 0
-                });
-                //test = self.matter.add.sprite(0,0,'spikes','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
+            if(list_of_spikes_tiles.length > 0){
+                //console.log(list_of_spikes_tiles);
+                return list_of_spikes_tiles;
             }
         }
     }
@@ -306,6 +310,7 @@ function create(){
     player.onTheFloor = true;
     player.collisionRightWall = false;
     player.collisionLeftWall = false;
+    player.isDeath = false;
     
     // animation idle du joueur
     this.anims.create({
@@ -342,17 +347,74 @@ function create(){
 
 
     moreMap(this,1,1,'mapFull',false);
-    moreMap(this,1,2,'startMap',true);
+    list = moreMap(this,1,2,'startMap',true);
+    if(list != null){
+        for(const e of list){
+            xindex = 1;
+            yindex = 2;
+            x=xindex*16*40+8+e.pixelX
+            y=yindex*16*20+14+e.pixelY
+            if(e.rotation !=0){
+                x+=6
+                y-=6
+            }
+            //position tilesmap+decalage(a cause de l'origine)+emplacement ed la tile <- x et y
+            this.matter.add.rectangle(x, y, 16, 2, { 
+                isSensor: true,
+                isStatic: true,
+                angle: e.rotation, //angle en rad
+                label:"pike"
+            });
+        }
+    }
     moreMap(this,1,3,'mapFull',false);
     
     for(i=1;i<8;i++){
         moreMap(this,i+1,1,'mapFull',false);
-        moreMap(this,i+1,2,('map'+i.toString()),true);
+        list = moreMap(this,i+1,2,('map'+i.toString()),true);
+        if(list != null){
+            for(const e of list){
+                xindex = i+1;
+                yindex = 2;
+                x=xindex*16*40+8+e.pixelX
+                y=yindex*16*20+14+e.pixelY
+                if(e.rotation !=0){
+                    x+=6
+                    y-=6
+                }
+                //position tilesmap+decalage(a cause de l'origine)+emplacement ed la tile <- x et y
+                this.matter.add.rectangle(x, y, 16, 2, { 
+                    isSensor: true,
+                    isStatic: true,
+                    angle: e.rotation, //angle en rad
+                    label:"pike"
+                });
+            }
+        }
         moreMap(this,i+1,3,'mapFull',false);
     }
 
     moreMap(this,i+1,1,'mapFull',false);
-    moreMap(this,i+1,2,'endMap',true);
+    list = moreMap(this,i+1,2,'endMap',true);
+    if(list != null){
+        for(const e of list){
+            xindex = i+1;
+            yindex = 2;
+            x=xindex*16*40+8+e.pixelX
+            y=yindex*16*20+14+e.pixelY
+            if(e.rotation !=0){
+                x+=6
+                y-=6
+            }
+            //position tilesmap+decalage(a cause de l'origine)+emplacement ed la tile <- x et y
+            this.matter.add.rectangle(x, y, 16, 2, { 
+                isSensor: true,
+                isStatic: true,
+                angle: e.rotation, //angle en rad
+                label:"pike"
+            });
+        }
+    }
     moreMap(this,i+1,3,'mapFull',false);
 
     moreMap(this,i+2,1,'mapFull',false);
@@ -400,13 +462,14 @@ function create(){
         const demi_largeur_tiles=16/2;                                                            //detectOnTheFloor
         const collision_height = 16;//tiles height     //hauteur de l'origine du perso            //detectWallCollision
         const tolerance = 1;                                                                      //detectOnTheFloor
-
+        //console.log(bodyB.parent.label)
         if(bodyA.parent.label == 'robotSprite'){
-            console.log(bodyB.parent.label)
+            //console.log(bodyB.parent.label)
             player.onTheFloor = detectOnTheFloor(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
             detectWallCollision(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,collision_height,(val)=>{player.collisionLeftWall = val},(val)=>{player.collisionRightWall = val;})
-            if(bodyB.parent.label == 'enemySprite'){
+            if(bodyB.parent.label == 'enemySprite' || bodyB.parent.label == 'pike'){
                 console.log("death")
+                player.isDeath = true;
             }
         }
     }
@@ -424,7 +487,7 @@ function create(){
 
     // collision du joueur
     var enemy_shapes = this.cache.json.get('enemyShapes');
-    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16*4, 2*20*16+18*16-16*8, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
+    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16*15, 2*20*16+18*16-16*8, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
     enemy_matter.setScale(0.5); //taille de l'ennemi
     enemy_matter.setFixedRotation(); //
     enemy_matter.setFriction(0);
@@ -442,7 +505,7 @@ function create(){
         const collision_height = 12.442;//hauteur de l'origine du perso                               //detectWallCollision
         const tolerance = 1;                                                                     //detectOnTheFloor
         
-        //console.log(bodyA.parent.label)
+        //console.log(bodyB)
         if(bodyB.parent.label == 'enemySprite'){
             enemy.onTheFloor = detectOnTheFloor(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
             detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;},(val)=>{enemy.collisionRightWall = val;})
@@ -498,6 +561,12 @@ function update(){
 
     // this.cloth.bodies[0].position.x = player.x-16+12
     // this.cloth.bodies[4].position.x = player.x-16+7
+
+    if(player.isDeath){
+        player.x = 1*30*16+8*16+16*5;
+        player.y = 2*20*16+18*16-16*5;
+        player.isDeath = false;
+    }
     
     //variable vitesse
     if(player.onTheFloor){
