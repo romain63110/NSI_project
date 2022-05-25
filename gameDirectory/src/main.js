@@ -114,17 +114,32 @@ HUD.prototype = {
     preload: function ()
     {
         this.load.image('background', './src/assets/images/background.png');
-        this.load.image('playButton', '.src/assets/images/playButton.png');
-        this.load.image('resumeButton', '.src/assets/images/resumeButton.png');
-        this.load.image('settingsButton', '.src/assets/images/settingsButton.png');
+        this.load.image('playButton', './src/assets/images/playButton.png');
+        this.load.image('resumeButton', './src/assets/images/resumeButton.png');
+        this.load.image('settingsButton', './src/assets/images/settingsButton.png');
     },
 
     create: function ()
     {
-        this.add.image(innerWidth / 2, innerHeight / 3.5, 'playButton').setScale(1, 1);
-        this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeButton').setScale(1, 1);
-        this.add.image(innerWidth / 1.1, innerHeight / 10, 'settingsButton').setScale(1, 1);
-    }
+        this.playButton = this.add.image(innerWidth / 2, innerHeight / 3.5, 'playButton').setScale(3, 3);
+        this.resumeButton = this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeButton').setScale(3, 3);
+        this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsButton').setScale(3, 3);
+    },
+
+    // update: function () //TOUT CA PLANTE QUAND ON CLIQUE !!
+    // {
+    //     let pointer = this.input.activePointer; // permet en gros la détection de la souris
+
+    //     if(pointer.isDown){ // quand on clique (malheureusement j'arrive pas à def une zone) ça change la teinte
+    //         playButton.setTint(0x333333 ); 
+    //     }
+    //     else if(pointer.isUp){ // et quand on relache c'est censé remettre l'image normale
+    //         this.playButton = this.add.image(innerWidth / 2, innerHeight / 3.5, 'playButton').setScale(3, 3);
+    //     }
+        
+    // }
+
+    
 
 };
 var HUD_scene = game.scene.add('HUD', HUD, true);
@@ -163,8 +178,18 @@ function preload() {
     this.load.image('tilesPng', './src/assets/tiles/tilesets.png');
     //chargement de la carte de tuile réalisée via Tiled
     this.load.tilemapTiledJSON('start', './src/assets/tiles/tilemap_start.json');
-    this.load.tilemapTiledJSON('map1', './src/assets/tiles/tilemap1.json');
+    this.load.tilemapTiledJSON('map_1', './src/assets/tiles/tilemap1.json');
     this.load.tilemapTiledJSON('edgeMap', './src/assets/tiles/edge_map.json');
+
+    this.load.tilemapTiledJSON('startMap', './testTiles/MapJules/mapStart.json');
+    this.load.tilemapTiledJSON('map1', './testTiles/MapJules/map1.json');
+    this.load.tilemapTiledJSON('map2', './testTiles/MapJules/map2.json');
+    this.load.tilemapTiledJSON('map3', './testTiles/MapJules/map3.json');
+    this.load.tilemapTiledJSON('map4', './testTiles/MapJules/map4.json');
+    this.load.tilemapTiledJSON('map5', './testTiles/MapJules/map5.json');
+    this.load.tilemapTiledJSON('map6', './testTiles/MapJules/map6.json');
+    this.load.tilemapTiledJSON('map7', './testTiles/MapJules/map7.json');
+    this.load.tilemapTiledJSON('endMap', './testTiles/MapJules/mapFinal.json');
     // this.load.tilemapTiledJSON('map3', './src/assets/tiles/tilemap3.json');
 
     //chargement de la musique
@@ -276,7 +301,7 @@ function create(){
     moreMap(this,1,3,'edgeMap',false);
     
     moreMap(this,2,1,'edgeMap',false);
-    moreMap(this,2,2,'map1',true);
+    moreMap(this,2,2,'map_1',true);
     moreMap(this,2,3,'edgeMap',false);
     
     // Camera centrée sur le personnage
