@@ -271,7 +271,7 @@ function create(){
     var shapes = this.cache.json.get('robotShapes');
 
     //création du joueur                  position | clé de l'image                  //for complex collision create with PhysicsEditor
-    player_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16, 'player','robotSprite',{shape: shapes.robotSprite}).setOrigin(0.5,0.5);
+    player_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16*5, 'player','robotSprite',{shape: shapes.robotSprite}).setOrigin(0.5,0.5);
     player_matter.setScale(1) //taille du joueur
     player_matter.setFixedRotation() //
     player_matter.setFriction(0)
@@ -388,7 +388,7 @@ function create(){
 
     // collision du joueur
     var enemy_shapes = this.cache.json.get('enemyShapes');
-    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16*4, 2*20*16+18*16-16*4, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
+    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16*4, 2*20*16+18*16-16*8, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
     enemy_matter.setScale(0.5); //taille de l'ennemi
     enemy_matter.setFixedRotation(); //
     enemy_matter.setFriction(0);
