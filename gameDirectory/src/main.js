@@ -310,6 +310,7 @@ function create(){
             // console.log('reset reset reset')
             setCollisionLeftWall(false)
             setCollisionRightWall(false)
+            //console.log(By-8-Ay)
         }
         debugXCollisionx=Bx;
         debugXCollisiony=By;
@@ -358,7 +359,7 @@ function create(){
     function enemy_collision_detector(bodyA, bodyB){
         const demi_collision_box = 8;//distance entre le centre est le bord de la colision       //detectOnTheFloor
         const demi_largeur_tiles=16/2;                                                           //detectOnTheFloor
-        const collision_height = 3.7;//hauteur de l'origine du perso                               //detectWallCollision
+        const collision_height = 12.442;//hauteur de l'origine du perso                               //detectWallCollision
         const tolerance = 1;                                                                     //detectOnTheFloor
         
         //console.log(bodyA.parent.label)
