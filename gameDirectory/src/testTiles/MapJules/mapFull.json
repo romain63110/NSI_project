@@ -99,13 +99,13 @@
  "nextobjectid":1,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.8.5",
+ "tiledversion":"1.8.3",
  "tileheight":16,
  "tilesets":[
         {
          "columns":56,
          "firstgid":1,
-         "image":"GitHub\/NSI_project\/gameDirectory\/src\/assets\/tiles\/tilesets.png",
+         "image":"..\/Documents\/GitHub\/NSI_project\/gameDirectory\/src\/assets\/tiles\/tilesets.png",
          "imageheight":600,
          "imagewidth":900,
          "margin":0,

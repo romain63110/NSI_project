@@ -232,7 +232,7 @@ function create(){
         //                              clé de la tilemap
         map[yindex][xindex] = self.make.tilemap({ key: tilemapKey });
         //                                  clé de l'image avec les tiles
-        tileset[yindex][xindex] = map[yindex][xindex].addTilesetImage('tilesets',"tilesPng",16,16,0,0); //définition du tileset utilisé
+        tileset[yindex][xindex] = map[yindex][xindex].addTilesetImage('tiles',"tilesPng",16,16,0,0); //définition du tileset utilisé
         //                                                         x   y
         platforms[yindex][xindex] = map[yindex][xindex].createLayer('platforms', tileset[yindex][xindex] , xindex*16*40, yindex*16*20);//plan des platformes
         //                                                         x   y
@@ -442,9 +442,9 @@ function create(){
     enemy_matter.anims.play('enemyIdleAnimation',true); //on joue l'aniamtion
 
     //debug
-    console.log(this);
-    console.log(player);
-    console.log(this.test1);
+    // console.log(this);
+    // console.log(player);
+    // console.log(this.test1);
     // this.test1 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5); //collision debug
     // this.test2 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5); //collision debug
 }
@@ -510,6 +510,6 @@ function update(){
         player.onTheFloor = false;
         //player.anims.play('jump', true); /*animation de saut pas encore implémentée*/
     }
-    //player.onTheFloor = false;
+    player.onTheFloor = false;
 }
 
