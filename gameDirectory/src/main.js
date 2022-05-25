@@ -308,10 +308,10 @@ function create(){
     }
 
     function player_collision_detector(bodyA, bodyB){
-        const demi_collision_box = 3.95;//distance entre le centre est le bord de la colision
-        const demi_largeur_tiles=16/2;
-        const collision_height = 16;//tiles height
-        const tolerance = 1;
+        const demi_collision_box = 3.95;//distance entre le centre est le bord de la colision     //detectOnTheFloor
+        const demi_largeur_tiles=16/2;                                                            //detectOnTheFloor
+        const collision_height = 16;//tiles height     //hauteur de l'origine du perso            //detectWallCollision
+        const tolerance = 1;                                                                      //detectOnTheFloor
 
         if(bodyA.parent.label == 'robotSprite'){
 
