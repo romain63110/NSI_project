@@ -468,7 +468,7 @@ function create(){
 
     // collision du joueur
     var enemy_shapes = this.cache.json.get('enemyShapes');
-    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16*4, 2*20*16+18*16-16*8, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
+    enemy_matter = this.matter.add.sprite(1*30*16+8*16+16*15, 2*20*16+18*16-16*8, 'enemy','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
     enemy_matter.setScale(0.5); //taille de l'ennemi
     enemy_matter.setFixedRotation(); //
     enemy_matter.setFriction(0);
