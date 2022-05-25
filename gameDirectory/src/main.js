@@ -89,7 +89,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         gamepad: true // fonctionalité à venir : prise en charge de manette
     },
     pixelArt: true, //retire l'anti aliasing pour éviter un effet de flou sur le pixel art
-    zoom: 3,
+    zoom: 1,
     scale: {
         mode: Phaser.Scale.RESIZE, // fenetre adaptive
     },
@@ -192,29 +192,13 @@ function preload() {
     this.load.tilemapTiledJSON('map6', './src/testTiles/MapJules/map6.json');
     this.load.tilemapTiledJSON('map7', './src/testTiles/MapJules/map7.json');
     this.load.tilemapTiledJSON('endMap', './src/testTiles/MapJules/mapFinal.json');
+    this.load.tilemapTiledJSON('mapFull', './src/testTiles/MapJules/mapFull.json');
     // this.load.tilemapTiledJSON('map3', './src/assets/tiles/tilemap3.json');
 
     //chargement de la musique
     this.load.audio('ost', './src/assets/musics/OST-NSI1.mp3');
 
 }
-
-// class EnemyPlugin extends Phaser.Plugins.BasePlugin {
-
-//     constructor (pluginManager)
-//     {
-//         super(pluginManager);
-
-//         //  Register our new Game Object type
-//         pluginManager.registerGameObject('enemy', this.createEnemy);
-//     }
-
-//     createEnemy (x, y)
-//     {
-//         return this.displayList.add(new EnemyGameObject(this.scene, x, y));
-//     }
-
-// }
 
 function create(){
     //lancement de la musique
@@ -250,11 +234,11 @@ function create(){
         //                                  clé de l'image avec les tiles
         tileset[yindex][xindex] = map[yindex][xindex].addTilesetImage('tilesets',"tilesPng",16,16,0,0); //définition du tileset utilisé
         //                                                         x   y
-        platforms[yindex][xindex] = map[yindex][xindex].createLayer('platforms', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
+        platforms[yindex][xindex] = map[yindex][xindex].createLayer('platforms', tileset[yindex][xindex] , xindex*16*40, yindex*16*20);//plan des platformes
         //                                                         x   y
-        cables[yindex][xindex] = map[yindex][xindex].createLayer('cables', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
+        cables[yindex][xindex] = map[yindex][xindex].createLayer('cables', tileset[yindex][xindex] , xindex*16*40, yindex*16*20);//plan des platformes
         //                                                         x   y
-        spikes[yindex][xindex] = map[yindex][xindex].createLayer('spikes', tileset[yindex][xindex] , xindex*16*30, yindex*16*20);//plan des platformes
+        spikes[yindex][xindex] = map[yindex][xindex].createLayer('spikes', tileset[yindex][xindex] , xindex*16*40, yindex*16*20);//plan des platformes
 
         if(collision){
             // ajouter de la collision:
@@ -271,7 +255,7 @@ function create(){
     var shapes = this.cache.json.get('robotShapes');
 
     //création du joueur                  position | clé de l'image                  //for complex collision create with PhysicsEditor
-    player_matter = this.matter.add.sprite(1*30*16+8*16+16, 2*20*16+18*16-16*5, 'player','robotSprite',{shape: shapes.robotSprite}).setOrigin(0.5,0.5);
+    player_matter = this.matter.add.sprite(1*30*16+8*16+16*5, 2*20*16+18*16-16*5, 'player','robotSprite',{shape: shapes.robotSprite}).setOrigin(0.5,0.5);
     player_matter.setScale(1) //taille du joueur
     player_matter.setFixedRotation() //
     player_matter.setFriction(0)
@@ -312,17 +296,29 @@ function create(){
 
     //ajout de la map
     //      this,xindex,yindex,name(tilemapTiledJSON),collision?
-    moreMap(this,0,1,'edgeMap',false);
-    moreMap(this,0,2,'edgeMap',true);
-    moreMap(this,0,3,'edgeMap',false);
+    moreMap(this,0,1,'mapFull',false);
+    moreMap(this,0,2,'mapFull',false);
+    moreMap(this,0,3,'mapFull',false);
 
-    moreMap(this,1,1,'edgeMap',false);
+
+    moreMap(this,1,1,'mapFull',false);
     moreMap(this,1,2,'startMap',true);
-    moreMap(this,1,3,'edgeMap',false);
+    moreMap(this,1,3,'mapFull',false);
     
-    moreMap(this,2,1,'edgeMap',false);
-    moreMap(this,2,2,'map_1',true);
-    moreMap(this,2,3,'edgeMap',false);
+    for(i=1;i<8;i++){
+        moreMap(this,i+1,1,'mapFull',false);
+        moreMap(this,i+1,2,('map'+i.toString()),true);
+        moreMap(this,i+1,3,'mapFull',false);
+    }
+
+    moreMap(this,i+1,1,'mapFull',false);
+    moreMap(this,i+1,2,'endMap',true);
+    moreMap(this,i+1,3,'mapFull',false);
+
+    moreMap(this,i+2,1,'mapFull',false);
+    moreMap(this,i+2,2,'mapFull',false);
+    moreMap(this,i+2,3,'mapFull',false);
+
     
     // Camera centrée sur le personnage
     this.cameras.main.startFollow(player,true,1,0.05);
@@ -373,18 +369,14 @@ function create(){
         }
     }
 
-    function onCollisionDetected(bodyA, bodyB){
-        //console.log(bodyA.label+"   "+bodyB.label)
-        player_collision_detector(bodyA, bodyB);
-        enemy_collision_detector(bodyA, bodyB);
-    }
-
     this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
-        onCollisionDetected(bodyA, bodyB);
+        player_collision_detector(bodyA, bodyB);
     });
     this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
-        onCollisionDetected(bodyA, bodyB);
+        player_collision_detector(bodyA, bodyB);
     });
+
+
 
     // collision du joueur
     var enemy_shapes = this.cache.json.get('enemyShapes');
@@ -415,6 +407,13 @@ function create(){
             // console.log("onTheFloor  "+enemy.onTheFloor)//collision debug
         }
     }
+
+    this.matter.world.on('collisionactive', function (event, bodyA, bodyB) {
+        enemy_collision_detector(bodyA, bodyB);
+    });
+    this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
+        enemy_collision_detector(bodyA, bodyB);
+    });
     
     
     
