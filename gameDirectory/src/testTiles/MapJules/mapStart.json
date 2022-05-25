@@ -162,11 +162,11 @@
                 {
                  "id":58,
                  "properties":[
-                        {
-                         "name":"collides",
-                         "type":"bool",
-                         "value":true
-                        }]
+                     {
+                            "name":"collides",
+                            "type":"bool",
+                            "value":true
+                     }]
                 }, 
                 {
                  "id":112,
