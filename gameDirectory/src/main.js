@@ -355,6 +355,7 @@ function create(){
     enemy.onTheFloor = true;
     enemy.collisionRightWall = false;
     enemy.collisionLeftWall = false;
+    enemy.lastVelocityX = 1;
 
     function enemy_collision_detector(bodyA, bodyB){
         const demi_collision_box = 8;//distance entre le centre est le bord de la colision       //detectOnTheFloor
@@ -422,17 +423,17 @@ function update(){
     vitesseY = 5;
 
     if(enemy.collisionRightWall){// touche le mur droit
-        setTimeout(function() {
-            //your code to be executed after 0.5 second
-            enemy_matter.setVelocityX(1);
-            enemy_matter.anims.play('enemyRunRightAnimation',true); //on joue l'aniamtion
-        }, 500);
-    }else if(!enemy.collisionRightWall){// touche le mur gauche
-        setTimeout(function() {
-            //your code to be executed after 0.5 second
-            enemy_matter.setVelocityX(-1);
-            //enemy_matter.anims.play('enemyRunLeftAnimation',true); //on joue l'aniamtion
-        }, 500);
+        console.log("go left");
+        enemy.setVelocityX(-1);
+        enemy.lastVelocityX = -1;
+        //enemy.anims.play('enemyRunLeftAnimation',true); //on joue l'aniamtion
+    }else if(enemy.collisionLeftWall){// touche le mur gauche
+        console.log("go right");
+        enemy.setVelocityX(1);
+        enemy.lastVelocityX = 1;
+        enemy_matter.anims.play('enemyRunRightAnimation',true); //on joue l'aniamtion
+    }else{
+        enemy.setVelocityX(enemy.lastVelocityX)
     }
 
     this.test1.x = enemy_matter.x;
