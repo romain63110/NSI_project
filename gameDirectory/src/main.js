@@ -291,6 +291,7 @@ function create(){
     player.onTheFloor = true;
     player.collisionRightWall = false;
     player.collisionLeftWall = false;
+    player.isDeath = false;
     
     // animation idle du joueur
     this.anims.create({
@@ -449,6 +450,7 @@ function create(){
             detectWallCollision(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,collision_height,(val)=>{player.collisionLeftWall = val},(val)=>{player.collisionRightWall = val;})
             if(bodyB.parent.label == 'enemySprite' || bodyB.parent.label == 'pike'){
                 console.log("death")
+                player.isDeath = true;
             }
         }
     }
@@ -540,6 +542,12 @@ function update(){
 
     // this.cloth.bodies[0].position.x = player.x-16+12
     // this.cloth.bodies[4].position.x = player.x-16+7
+
+    if(player.isDeath){
+        player.x = 1*30*16+8*16+16*5;
+        player.y = 2*20*16+18*16-16*5;
+        player.isDeath = false;
+    }
     
     //variable vitesse
     if(player.onTheFloor){
