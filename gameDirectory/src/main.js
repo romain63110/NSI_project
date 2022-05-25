@@ -183,21 +183,39 @@ function preload() {
     this.load.tilemapTiledJSON('map_1', './src/assets/tiles/tilemap1.json');
     this.load.tilemapTiledJSON('edgeMap', './src/assets/tiles/edge_map.json');
 
-    this.load.tilemapTiledJSON('startMap', './testTiles/MapJules/mapStart.json');
-    this.load.tilemapTiledJSON('map1', './testTiles/MapJules/map1.json');
-    this.load.tilemapTiledJSON('map2', './testTiles/MapJules/map2.json');
-    this.load.tilemapTiledJSON('map3', './testTiles/MapJules/map3.json');
-    this.load.tilemapTiledJSON('map4', './testTiles/MapJules/map4.json');
-    this.load.tilemapTiledJSON('map5', './testTiles/MapJules/map5.json');
-    this.load.tilemapTiledJSON('map6', './testTiles/MapJules/map6.json');
-    this.load.tilemapTiledJSON('map7', './testTiles/MapJules/map7.json');
-    this.load.tilemapTiledJSON('endMap', './testTiles/MapJules/mapFinal.json');
+    this.load.tilemapTiledJSON('startMap', './src/testTiles/MapJules/mapStart.json');
+    this.load.tilemapTiledJSON('map1', './src/testTiles/MapJules/map1.json');
+    this.load.tilemapTiledJSON('map2', './src/testTiles/MapJules/map2.json');
+    this.load.tilemapTiledJSON('map3', './src/testTiles/MapJules/map3.json');
+    this.load.tilemapTiledJSON('map4', './src/testTiles/MapJules/map4.json');
+    this.load.tilemapTiledJSON('map5', './src/testTiles/MapJules/map5.json');
+    this.load.tilemapTiledJSON('map6', './src/testTiles/MapJules/map6.json');
+    this.load.tilemapTiledJSON('map7', './src/testTiles/MapJules/map7.json');
+    this.load.tilemapTiledJSON('endMap', './src/testTiles/MapJules/mapFinal.json');
     // this.load.tilemapTiledJSON('map3', './src/assets/tiles/tilemap3.json');
 
     //chargement de la musique
     this.load.audio('ost', './src/assets/musics/OST-NSI1.mp3');
 
 }
+
+// class EnemyPlugin extends Phaser.Plugins.BasePlugin {
+
+//     constructor (pluginManager)
+//     {
+//         super(pluginManager);
+
+//         //  Register our new Game Object type
+//         pluginManager.registerGameObject('enemy', this.createEnemy);
+//     }
+
+//     createEnemy (x, y)
+//     {
+//         return this.displayList.add(new EnemyGameObject(this.scene, x, y));
+//     }
+
+// }
+
 function create(){
     //lancement de la musique
     let music = this.sound.add('ost');
@@ -299,7 +317,7 @@ function create(){
     moreMap(this,0,3,'edgeMap',false);
 
     moreMap(this,1,1,'edgeMap',false);
-    moreMap(this,1,2,'start',true);
+    moreMap(this,1,2,'startMap',true);
     moreMap(this,1,3,'edgeMap',false);
     
     moreMap(this,2,1,'edgeMap',false);
