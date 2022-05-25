@@ -16,72 +16,72 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
             },
             debug: false,
 			debug: {
-                showAxes: false,
-                showAngleIndicator: true,
-                angleColor: 0xe81153,
+                // showAxes: false,
+                // showAngleIndicator: true,
+                // angleColor: 0xe81153,
 
-                showBroadphase: false,
-                broadphaseColor: 0xffb400,
+                // showBroadphase: false,
+                // broadphaseColor: 0xffb400,
 
-                showBounds: false,
-                boundsColor: 0xffffff,
+                // showBounds: false,
+                // boundsColor: 0xffffff,
 
-                showVelocity: true,
-                velocityColor: 0x00aeef,
+                // showVelocity: true,
+                // velocityColor: 0x00aeef,
 
-                showCollisions: true,
-                collisionColor: 0xf5950c,
+                // showCollisions: true,
+                // collisionColor: 0xf5950c,
     
-                showSeparations: false,
-                separationColor: 0xffa500,
+                // showSeparations: false,
+                // separationColor: 0xffa500,
 
-                showBody: true,
-                showStaticBody: true,
-                showInternalEdges: true,
+                // showBody: true,
+                // showStaticBody: true,
+                // showInternalEdges: true,
 
-                renderFill: false,
-                renderLine: true,
+                // renderFill: false,
+                // renderLine: true,
     
-                fillColor: 0x106909,
-                fillOpacity: 1,
-                lineColor: 0x28de19,
-                lineOpacity: 1,
-                lineThickness: 1,
+                // fillColor: 0x106909,
+                // fillOpacity: 1,
+                // lineColor: 0x28de19,
+                // lineOpacity: 1,
+                // lineThickness: 1,
     
-                staticFillColor: 0x0d177b,
-                staticLineColor: 0x1327e4,
+                // staticFillColor: 0x0d177b,
+                // staticLineColor: 0x1327e4,
 
-                showSleeping: true,
-                staticBodySleepOpacity: 1,
-                sleepFillColor: 0x464646,
-                sleepLineColor: 0x999a99,
+                // showSleeping: true,
+                // staticBodySleepOpacity: 1,
+                // sleepFillColor: 0x464646,
+                // sleepLineColor: 0x999a99,
     
-                showSensors: true,
-                sensorFillColor: 0x0d177b,
-                sensorLineColor: 0x1327e4,
+                // showSensors: true,
+                // sensorFillColor: 0x0d177b,
+                // sensorLineColor: 0x1327e4,
     
-                showPositions: true,
-                positionSize: 4,
-                positionColor: 0xe042da,
+                // showPositions: true,
+                // positionSize: 4,
+                // positionColor: 0xe042da,
     
-                showJoint: true,
-                jointColor: 0xe0e042,
-                jointLineOpacity: 1,
-                jointLineThickness: 2,
+                // showJoint: true,
+                // jointColor: 0xe0e042,
+                // jointLineOpacity: 1,
+                // jointLineThickness: 2,
     
-                pinSize: 4,
-                pinColor: 0x42e0e0,
+                // pinSize: 4,
+                // pinColor: 0x42e0e0,
     
-                springColor: 0xe042e0,
+                // springColor: 0xe042e0,
     
-                anchorColor: 0xefefef,
-                anchorSize: 4,
+                // anchorColor: 0xefefef,
+                // anchorSize: 4,
     
-                showConvexHulls: true,
-                hullColor: 0xd703d0,
+                // showConvexHulls: true,
+                // hullColor: 0xd703d0,
 				
-				gameInfo: true,
-				gameTimeInfo: true
+				// gameInfo: true,
+				// gameTimeInfo: true
             }
         }
     },
@@ -114,12 +114,16 @@ HUD.prototype = {
     preload: function ()
     {
         this.load.image('background', './src/assets/images/background.png');
+        this.load.image('playButton', '.src/assets/images/playButton.png');
+        this.load.image('resumeButton', '.src/assets/images/resumeButton.png');
+        this.load.image('settingsButton', '.src/assets/images/settingsButton.png');
     },
 
     create: function ()
     {
-        this.face = this.add.image(0, 0, 'background').setScale(0.2, 0.2);
-        this.add.text(0, 0, 'HUD', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 });
+        this.add.image(innerWidth / 2, innerHeight / 3.5, 'playButton').setScale(1, 1);
+        this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeButton').setScale(1, 1);
+        this.add.image(innerWidth / 1.1, innerHeight / 10, 'settingsButton').setScale(1, 1);
     }
 
 };
