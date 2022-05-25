@@ -98,9 +98,11 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         create: create, //instanciations dans le code, appelée une fois apres preload()
         update: update //et réactualisation (utilisé pour la surveillance des touches), appelée en boucle
     },
+    
 }
 
 const game = new Phaser.Game(config); //création du jeu
+
 
 //HUD
 var HUD = {};
@@ -113,31 +115,27 @@ HUD.prototype = {
 
     preload: function ()
     {
-        this.load.image('background', './src/assets/images/background.png');
-        this.load.image('playButton', './src/assets/images/playButton.png');
-        this.load.image('resumeButton', './src/assets/images/resumeButton.png');
-        this.load.image('settingsButton', './src/assets/images/settingsButton.png');
+        this.load.image('playImg', './src/assets/images/playButton.png');
+        this.load.image('playImgPressed', './src/assets/images/playButtonPressed.png');
+        this.load.image('resumeImg', './src/assets/images/resumeButton.png');
+        this.load.image('resumeImgPressed', './src/assets/images/resumeButtonPressed.png');
+        this.load.image('settingsImg', './src/assets/images/settingsButton.png');
+        this.load.image('settingsImgPressed', './src/assets/images/settingsButtonPressed.png');
     },
 
     create: function ()
     {
-        this.playButton = this.add.image(innerWidth / 2, innerHeight / 3.5, 'playButton').setScale(3, 3);
-        this.resumeButton = this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeButton').setScale(3, 3);
-        this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsButton').setScale(3, 3);
+        this.playButton = this.add.image(innerWidth / 2, innerHeight / 3.5, 'playImg').setScale(3, 3);
+        this.resumeButton = this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeImg').setScale(3, 3);
+        this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsImg').setScale(3, 3);
+        this.settingsButton.setInteractive();
+        
     },
 
-    // update: function () //TOUT CA PLANTE QUAND ON CLIQUE !!
-    // {
-    //     let pointer = this.input.activePointer; // permet en gros la détection de la souris
-
-    //     if(pointer.isDown){ // quand on clique (malheureusement j'arrive pas à def une zone) ça change la teinte
-    //         playButton.setTint(0x333333 ); 
-    //     }
-    //     else if(pointer.isUp){ // et quand on relache c'est censé remettre l'image normale
-    //         this.playButton = this.add.image(innerWidth / 2, innerHeight / 3.5, 'playButton').setScale(3, 3);
-    //     }
-        
-    // }
+    update: function () //TOUT CA PLANTE QUAND ON CLIQUE !!
+    {
+        this.settingsButton.on('pointerover', () => { console.log('pointerover'); this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsImgPressed').setScale(3, 3); });
+    }
 
     
 
@@ -158,6 +156,7 @@ function preload() {
 
     //surveillance des touches
     keyboard = this.input.keyboard.createCursorKeys()
+    this.input.mouse.disableContextMenu();
 
     //chargement de l'arrière plan
     this.load.image('background', './src/assets/images/background.png');
@@ -270,7 +269,7 @@ function create(){
     // animation idle du joueur
     this.anims.create({
         key: 'idle', 
-        frames: this.anims.generateFrameNumbers('playerIdle', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frames: this.anims.generateFrameNumbers('playerIdle', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }),//frames animées
         frameRate: 10, // six images par seconde
         repeat: -1 //infini
     });
@@ -278,7 +277,7 @@ function create(){
     
     this.anims.create({
         key: 'run',
-        frames: this.anims.generateFrameNumbers('playerRun', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frames: this.anims.generateFrameNumbers('playerRun', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ] }),//frames animées
         frameRate: 6,
         repeat: -1
 
@@ -427,14 +426,14 @@ function create(){
     });
     this.anims.create({
         key: 'enemyRunRightAnimation',
-        frames: this.anims.generateFrameNumbers('enemyRunR', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
+        frames: this.anims.generateFrameNumbers('enemyRunR', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }),//frames animées
         frameRate: 13,
         repeat: -1
 
     });
     this.anims.create({
         key: 'enemyRunLeftAnimation',
-        frames: this.anims.generateFrameNumbers('enemyRunL', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9/*, 10, 11, 12*/ ] }),//frames animées
+        frames: this.anims.generateFrameNumbers('enemyRunL', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ] }),//frames animées
         frameRate: 9,
         repeat: -1
 
@@ -468,7 +467,7 @@ function update(){
         // console.log("go left");//collision debug
         enemy.setVelocityX(-1);
         enemy.lastVelocityX = -1;
-        //enemy.anims.play('enemyRunLeftAnimation',true); //on joue l'aniamtion
+        enemy.anims.play('enemyRunLeftAnimation',true); //on joue l'aniamtion
     }else if(enemy.collisionLeftWall){// touche le mur gauche
         // console.log("go right");//collision debug
         enemy.setVelocityX(1);
@@ -490,14 +489,10 @@ function update(){
     }
     if (keyboard.left.isDown /*&& !player.collisionLeftWall*/) {
         //player.collisionRightWall = false;
-        if(!player.collisionLeftWall){
-            player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
-        }
+        player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
         player.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown /*&& !player.collisionRightWall*/) {
-        if(!player.collisionRightWall){
-            player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
-        }
+        player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
         player.setVelocityX(speed_x);
         //player.collisionLeftWall = false;     
     } else{ player.anims.play('idle',true); }
