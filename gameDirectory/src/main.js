@@ -16,72 +16,72 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
             },
             debug: false,
 			debug: {
-                // showAxes: false,
-                // showAngleIndicator: true,
-                // angleColor: 0xe81153,
+                showAxes: false,
+                showAngleIndicator: true,
+                angleColor: 0xe81153,
 
-                // showBroadphase: false,
-                // broadphaseColor: 0xffb400,
+                showBroadphase: false,
+                broadphaseColor: 0xffb400,
 
-                // showBounds: false,
-                // boundsColor: 0xffffff,
+                showBounds: false,
+                boundsColor: 0xffffff,
 
-                // showVelocity: true,
-                // velocityColor: 0x00aeef,
+                showVelocity: true,
+                velocityColor: 0x00aeef,
 
-                // showCollisions: true,
-                // collisionColor: 0xf5950c,
+                showCollisions: true,
+                collisionColor: 0xf5950c,
     
-                // showSeparations: false,
-                // separationColor: 0xffa500,
+                showSeparations: false,
+                separationColor: 0xffa500,
 
-                // showBody: true,
-                // showStaticBody: true,
-                // showInternalEdges: true,
+                showBody: true,
+                showStaticBody: true,
+                showInternalEdges: true,
 
-                // renderFill: false,
-                // renderLine: true,
+                renderFill: false,
+                renderLine: true,
     
-                // fillColor: 0x106909,
-                // fillOpacity: 1,
-                // lineColor: 0x28de19,
-                // lineOpacity: 1,
-                // lineThickness: 1,
+                fillColor: 0x106909,
+                fillOpacity: 1,
+                lineColor: 0x28de19,
+                lineOpacity: 1,
+                lineThickness: 1,
     
-                // staticFillColor: 0x0d177b,
-                // staticLineColor: 0x1327e4,
+                staticFillColor: 0x0d177b,
+                staticLineColor: 0x1327e4,
 
-                // showSleeping: true,
-                // staticBodySleepOpacity: 1,
-                // sleepFillColor: 0x464646,
-                // sleepLineColor: 0x999a99,
+                showSleeping: true,
+                staticBodySleepOpacity: 1,
+                sleepFillColor: 0x464646,
+                sleepLineColor: 0x999a99,
     
-                // showSensors: true,
-                // sensorFillColor: 0x0d177b,
-                // sensorLineColor: 0x1327e4,
+                showSensors: true,
+                sensorFillColor: 0x0d177b,
+                sensorLineColor: 0x1327e4,
     
-                // showPositions: true,
-                // positionSize: 4,
-                // positionColor: 0xe042da,
+                showPositions: true,
+                positionSize: 4,
+                positionColor: 0xe042da,
     
-                // showJoint: true,
-                // jointColor: 0xe0e042,
-                // jointLineOpacity: 1,
-                // jointLineThickness: 2,
+                showJoint: true,
+                jointColor: 0xe0e042,
+                jointLineOpacity: 1,
+                jointLineThickness: 2,
     
-                // pinSize: 4,
-                // pinColor: 0x42e0e0,
+                pinSize: 4,
+                pinColor: 0x42e0e0,
     
-                // springColor: 0xe042e0,
+                springColor: 0xe042e0,
     
-                // anchorColor: 0xefefef,
-                // anchorSize: 4,
+                anchorColor: 0xefefef,
+                anchorSize: 4,
     
-                // showConvexHulls: true,
-                // hullColor: 0xd703d0,
+                showConvexHulls: true,
+                hullColor: 0xd703d0,
 				
-				// gameInfo: true,
-				// gameTimeInfo: true
+				gameInfo: true,
+				gameTimeInfo: true
             }
         }
     },
@@ -89,7 +89,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
         gamepad: true // fonctionalité à venir : prise en charge de manette
     },
     pixelArt: true, //retire l'anti aliasing pour éviter un effet de flou sur le pixel art
-    zoom: 3,
+    zoom: 1,
     scale: {
         mode: Phaser.Scale.RESIZE, // fenetre adaptive
     },
@@ -129,12 +129,12 @@ HUD.prototype = {
         this.resumeButton = this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeImg').setScale(3, 3);
         this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsImg').setScale(3, 3);
         this.settingsButton.setInteractive();
-        
     },
 
-    update: function () //TOUT CA PLANTE QUAND ON CLIQUE !!
+    update: function () 
     {
-        this.settingsButton.on('pointerover', () => { console.log('pointerover'); this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsImgPressed').setScale(3, 3); });
+        this.settingsButton.on('pointerover', () => { console.log('pointeur dessus'); this.settingsButton.setTexture('settingsImgPressed'); });
+        this.settingsButton.on('pointerout', () => { console.log('pointeur parti :( '); this.settingsButton.setTexture('settingsImg'); });
     }
 
     
@@ -228,21 +228,43 @@ function create(){
 
     function moreMap(self,xindex,yindex,tilemapKey,collision){
         //ajout de la map
-        //                              clé de la tilemap
+        //                                             clé de la tilemap
         map[yindex][xindex] = self.make.tilemap({ key: tilemapKey });
-        //                                  clé de l'image avec les tiles
+        //                                                                     clé de l'image avec les tiles
         tileset[yindex][xindex] = map[yindex][xindex].addTilesetImage('tiles',"tilesPng",16,16,0,0); //définition du tileset utilisé
-        //                                                         x   y
+        //                                                                                                         x   y
         platforms[yindex][xindex] = map[yindex][xindex].createLayer('platforms', tileset[yindex][xindex] , xindex*16*40, yindex*16*20);//plan des platformes
-        //                                                         x   y
+        //                                                                                                      x   y
         cables[yindex][xindex] = map[yindex][xindex].createLayer('cables', tileset[yindex][xindex] , xindex*16*40, yindex*16*20);//plan des platformes
-        //                                                         x   y
+        //                                                                                                       x   y
         spikes[yindex][xindex] = map[yindex][xindex].createLayer('spikes', tileset[yindex][xindex] , xindex*16*40, yindex*16*20);//plan des platformes
 
         if(collision){
             // ajouter de la collision:
             platforms[yindex][xindex].setCollisionByProperty({ collides:true })
             self.matter.world.convertTilemapLayer(platforms[yindex][xindex]);
+
+            //lister les tiles pics
+            var list_of_spikes_tiles = [];
+            var i = 0;
+            var new_tile = "";
+            while(new_tile != null){
+                new_tile = spikes[yindex][xindex].findByIndex(227,i)
+                if(new_tile != null){
+                    list_of_spikes_tiles.push(new_tile)
+                }
+                i++;
+            }
+            //ajout de la collision avec les pics
+            if(list_of_spikes_tiles.length < 0){
+                console.log(list_of_spikes_tiles);
+                this.matter.add.rectangle(xindex*16*40, yindex*16*20, 500, 100,0x6666ff, { 
+                    restitution: 0.9,
+                    isSensor: true,
+                    angle: 0
+                });
+                //test = self.matter.add.sprite(0,0,'spikes','enemySprite',{shape: enemy_shapes.enemySprite}).setOrigin(0.5,0.5);
+            }
         }
     }
 
@@ -361,10 +383,12 @@ function create(){
         const tolerance = 1;                                                                      //detectOnTheFloor
 
         if(bodyA.parent.label == 'robotSprite'){
-
+            console.log(bodyB.parent.label)
             player.onTheFloor = detectOnTheFloor(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
-            detectWallCollision(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,collision_height,(val)=>{player.collisionLeftWall = val;player.anims.play('idle',true);},(val)=>{player.collisionRightWall = val;player.anims.play('idle',true);})
-            
+            detectWallCollision(bodyA.position.x,bodyA.position.y,bodyB.position.x,bodyB.position.y,collision_height,(val)=>{player.collisionLeftWall = val},(val)=>{player.collisionRightWall = val;})
+            if(bodyB.parent.label == 'enemySprite'){
+                console.log("death")
+            }
         }
     }
 
@@ -374,6 +398,8 @@ function create(){
     this.matter.world.on('collisionstart', function (event, bodyA, bodyB) {
         player_collision_detector(bodyA, bodyB);
     });
+
+    
 
 
 
@@ -420,7 +446,7 @@ function create(){
     this.anims.create({
         key: 'enemyIdleAnimation',
         frames: this.anims.generateFrameNumbers('enemyIdle', { frames:  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39/*, 40*/] }),//frames animées
-        frameRate: 40,
+        frameRate: 6,
         repeat: -1
 
     });
@@ -489,13 +515,23 @@ function update(){
     }
     if (keyboard.left.isDown /*&& !player.collisionLeftWall*/) {
         //player.collisionRightWall = false;
-        player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
+        if(!player.collisionLeftWall){
+            player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
+        }else{
+            player.anims.play('idle',true); 
+        }
         player.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown /*&& !player.collisionRightWall*/) {
-        player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
+        if(!player.collisionRightWall){
+            player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
+        }else{
+            player.anims.play('idle',true); 
+        }
         player.setVelocityX(speed_x);
         //player.collisionLeftWall = false;     
-    } else{ player.anims.play('idle',true); }
+    } else{ 
+        player.anims.play('idle',true); 
+    }
 
 
     // Mouvement vertical
