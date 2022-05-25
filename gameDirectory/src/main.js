@@ -149,8 +149,8 @@ let keyboard; // déclaration de variable, destinée à recevoir les inputs du c
 let player;
 lastXCollisionx = 0;//collision
 lastXCollisiony = 0;//collision
-debugXCollisionx = 0;//collision
-debugXCollisiony = 0;//collision
+// debugXCollisionx = 0;//collision debug
+// debugXCollisiony = 0;//collision debug
 
 function preload() {
     //zoom
@@ -337,8 +337,8 @@ function create(){
             setCollisionRightWall(false)
             //console.log(By-8-Ay)
         }
-        debugXCollisionx=Bx;
-        debugXCollisiony=By;
+        // debugXCollisionx=Bx;//collision debug
+        // debugXCollisiony=By;//collision debug
     }
 
     function player_collision_detector(bodyA, bodyB){
@@ -392,9 +392,9 @@ function create(){
         if(bodyB.parent.label == 'enemySprite'){
             enemy.onTheFloor = detectOnTheFloor(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
             detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;},(val)=>{enemy.collisionRightWall = val;})
-            console.log("collisionLeftWall  "+enemy.collisionLeftWall)
-            console.log("collisionRightWall  "+enemy.collisionRightWall)
-            console.log("onTheFloor  "+enemy.onTheFloor)
+            // console.log("collisionLeftWall  "+enemy.collisionLeftWall)//collision debug
+            // console.log("collisionRightWall  "+enemy.collisionRightWall)//collision debug
+            // console.log("onTheFloor  "+enemy.onTheFloor)//collision debug
         }
     }
     
@@ -428,8 +428,8 @@ function create(){
     console.log(this);
     console.log(player);
     console.log(this.test1);
-    this.test1 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
-    this.test2 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
+    // this.test1 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5); //collision debug
+    // this.test2 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5); //collision debug
 }
 function update(){
     // this.cloth.bodies[0].position.y = player.y-2
@@ -448,12 +448,12 @@ function update(){
     vitesseY = 5;
 
     if(enemy.collisionRightWall){// touche le mur droit
-        console.log("go left");
+        // console.log("go left");//collision debug
         enemy.setVelocityX(-1);
         enemy.lastVelocityX = -1;
         //enemy.anims.play('enemyRunLeftAnimation',true); //on joue l'aniamtion
     }else if(enemy.collisionLeftWall){// touche le mur gauche
-        console.log("go right");
+        // console.log("go right");//collision debug
         enemy.setVelocityX(1);
         enemy.lastVelocityX = 1;
         enemy_matter.anims.play('enemyRunRightAnimation',true); //on joue l'aniamtion
@@ -461,10 +461,10 @@ function update(){
         enemy.setVelocityX(enemy.lastVelocityX)
     }
 
-    this.test1.x = enemy_matter.x;
-    this.test1.y = enemy_matter.y;
-    this.test2.x = debugXCollisionx;
-    this.test2.y = debugXCollisiony;
+    // this.test1.x = enemy_matter.x;//collision debug
+    // this.test1.y = enemy_matter.y;//collision debug
+    // this.test2.x = debugXCollisionx;//collision debug
+    // this.test2.y = debugXCollisiony;//collision debug
 
     
     // Mouvement Horizontal
