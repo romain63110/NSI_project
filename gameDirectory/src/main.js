@@ -112,9 +112,9 @@ HUD = function (){};
 HUD.prototype.constructor = HUD;
 
 HUD.prototype = {
-
+// sers à avoir tous les éléments du HUD au même endroit, choix pratique non requis
     preload: function ()
-    {
+    { //chargements des images de menus
         this.load.image('playImg', './src/assets/images/playButton.png');
         this.load.image('playImgPressed', './src/assets/images/playButtonPressed.png');
         this.load.image('resumeImg', './src/assets/images/resumeButton.png');
@@ -125,18 +125,27 @@ HUD.prototype = {
 
     create: function ()
     {
-        this.playButton = this.add.image(innerWidth / 2, innerHeight / 3.5, 'playImg').setScale(3, 3);
-        this.playButton.setInteractive();
+        this.playButton = this.add.image(innerWidth / 2, innerHeight / 3.5, 'playImg').setScale(3, 3); //création du bouton
+        this.playButton.setInteractive(); //permet des échanges avec le bouton
+        this.playButton.visible = false; //bouton caché par défaut
 
-        this.resumeButton = this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeImg').setScale(3, 3);
-        this.resumeButton.setInteractive();
+        this.resumeButton = this.add.image(innerWidth / 2, innerHeight / 2.5, 'resumeImg').setScale(3, 3); //création du bouton
+        this.resumeButton.setInteractive(); //permet des échanges avec le bouton
+        this.resumeButton.visible = false;//bouton caché par défaut
 
-        this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsImg').setScale(3, 3);
-        this.settingsButton.setInteractive();
+        this.settingsButton = this.add.image(innerWidth / 1.05, innerHeight / 15, 'settingsImg').setScale(3, 3); //création du bouton
+        this.settingsButton.setInteractive(); //permet des échanges avec le bouton
     },
 
-    update: function () 
-    {   //changements de texture au survol des boutons
+    update: function ()
+    {   
+        this.input.keyboard.on('keydown-F1', () => { 
+            console.log('ta bulation'); 
+            this.playButton.visible= !this.playButton.visible; 
+            this.resumeButton.visible= !this.resumeButton.visible; 
+        });
+
+        //changements de texture au survol des boutons
         this.settingsButton.on('pointerover', () => { console.log('pointeur dessus'); this.settingsButton.setTexture('settingsImgPressed'); }); 
         this.settingsButton.on('pointerout', () => { console.log('pointeur parti :( '); this.settingsButton.setTexture('settingsImg'); });
 
