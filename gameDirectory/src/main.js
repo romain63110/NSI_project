@@ -114,9 +114,9 @@ HUD.prototype = {
     preload: function ()
     {
         this.load.image('background', './src/assets/images/background.png');
-        this.load.image('playButton', '.src/assets/images/playButton.png');
-        this.load.image('resumeButton', '.src/assets/images/resumeButton.png');
-        this.load.image('settingsButton', '.src/assets/images/settingsButton.png');
+        this.load.image('playButton', './src/assets/images/playButton.png');
+        this.load.image('resumeButton', './src/assets/images/resumeButton.png');
+        this.load.image('settingsButton', './src/assets/images/settingsButton.png');
     },
 
     create: function ()
@@ -134,6 +134,8 @@ let keyboard; // déclaration de variable, destinée à recevoir les inputs du c
 let player;
 lastXCollisionx = 0;//collision
 lastXCollisiony = 0;//collision
+debugXCollisionx = 0;//collision
+debugXCollisiony = 0;//collision
 
 function preload() {
     //zoom
@@ -295,7 +297,7 @@ function create(){
     }
 
     function detectWallCollision(Ax,Ay,Bx,By,collision_height,setCollisionLeftWall,setCollisionRightWall){
-        //console.log(By-Ay-collision_height-(By-Ay+collision_height)/2)
+        //console.log(By-Ay-collision_height-(By-Ay+collision_height)/2) // 8-> distance Ax Bx max
         if(Ay+collision_height > By && By > Ay-collision_height){//collision avec un mur detecter
             if(Bx < Ax){
                 //console.log('left')
@@ -309,6 +311,8 @@ function create(){
             setCollisionLeftWall(false)
             setCollisionRightWall(false)
         }
+        debugXCollisionx=Bx;
+        debugXCollisiony=By;
     }
 
     function player_collision_detector(bodyA, bodyB){
@@ -352,14 +356,13 @@ function create(){
     enemy.collisionLeftWall = false;
 
     function enemy_collision_detector(bodyA, bodyB){
-        const demi_collision_box = 7.336;//distance entre le centre est le bord de la colision   //detectOnTheFloor
+        const demi_collision_box = 8;//distance entre le centre est le bord de la colision       //detectOnTheFloor
         const demi_largeur_tiles=16/2;                                                           //detectOnTheFloor
-        const collision_height = 7.336;//hauteur de l'origine du perso                           //detectWallCollision
+        const collision_height = 3.7;//hauteur de l'origine du perso                               //detectWallCollision
         const tolerance = 1;                                                                     //detectOnTheFloor
         
-        // //console.log(bodyA.parent.label)
+        //console.log(bodyA.parent.label)
         if(bodyB.parent.label == 'enemySprite'){
-
             enemy.onTheFloor = detectOnTheFloor(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,demi_collision_box,demi_largeur_tiles,tolerance);
             detectWallCollision(bodyB.position.x,bodyB.position.y,bodyA.position.x,bodyA.position.y,collision_height,(val)=>{enemy.collisionLeftWall = val;},(val)=>{enemy.collisionRightWall = val;})
             console.log("collisionLeftWall  "+enemy.collisionLeftWall)
@@ -373,31 +376,33 @@ function create(){
     // animation attaque/mouvement de l'ennemi
     this.anims.create({
         key: 'enemyIdleAnimation',
-        frames: this.anims.generateFrameNumbers('enemyIdle', { frames:  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40] }),//frames animées
-        frameRate: 12,
+        frames: this.anims.generateFrameNumbers('enemyIdle', { frames:  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39/*, 40*/] }),//frames animées
+        frameRate: 40,
         repeat: -1
 
     });
     this.anims.create({
         key: 'enemyRunRightAnimation',
         frames: this.anims.generateFrameNumbers('enemyRunR', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
-        frameRate: 12,
+        frameRate: 13,
         repeat: -1
 
     });
     this.anims.create({
         key: 'enemyRunLeftAnimation',
-        frames: this.anims.generateFrameNumbers('enemyRunL', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ] }),//frames animées
-        frameRate: 12,
+        frames: this.anims.generateFrameNumbers('enemyRunL', { frames: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9/*, 10, 11, 12*/ ] }),//frames animées
+        frameRate: 9,
         repeat: -1
 
     });
-    enemy_matter.anims.play('enemyRunAnimation',true); //on joue l'aniamtion
+    enemy_matter.anims.play('enemyIdleAnimation',true); //on joue l'aniamtion
 
     //debug
     console.log(this);
     console.log(player);
     console.log(this.test1);
+    this.test1 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
+    this.test2 = this.add.text(0, 0, '+', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize:35 }).setOrigin(0.5,0.5);
 }
 function update(){
     // this.cloth.bodies[0].position.y = player.y-2
@@ -416,10 +421,23 @@ function update(){
     vitesseY = 5;
 
     if(enemy.collisionRightWall){// touche le mur droit
-        enemy_matter.setVelocityX(-1);
+        setTimeout(function() {
+            //your code to be executed after 0.5 second
+            enemy_matter.setVelocityX(1);
+            enemy_matter.anims.play('enemyRunRightAnimation',true); //on joue l'aniamtion
+        }, 500);
     }else if(!enemy.collisionRightWall){// touche le mur gauche
-        enemy_matter.setVelocityX(1);
+        setTimeout(function() {
+            //your code to be executed after 0.5 second
+            enemy_matter.setVelocityX(-1);
+            //enemy_matter.anims.play('enemyRunLeftAnimation',true); //on joue l'aniamtion
+        }, 500);
     }
+
+    this.test1.x = enemy_matter.x;
+    this.test1.y = enemy_matter.y;
+    this.test2.x = debugXCollisionx;
+    this.test2.y = debugXCollisiony;
 
     
     // Mouvement Horizontal
