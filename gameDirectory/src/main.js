@@ -169,7 +169,7 @@ function preload() {
 
     //chargement du spritesheet de l'ennemi (spritesheet=images accolées du joueurs à différentes frame pour l'animation)
     this.load.spritesheet('enemyRunR', './src/assets/images/spritesheetArachnobot3-sheet.png', { frameWidth: 64, frameHeight: 48 });  //anim course droite
-    this.load.spritesheet('enemyRunL', './src/assets/images/gameDirectory/spritesheetArachnobot3-sheet_movingLeft.png', { frameWidth: 64, frameHeight: 48 });  //anim course gauche
+    this.load.spritesheet('enemyRunL', './src/assets/images/spritesheetArachnobot3-sheet_movingLeft.png', { frameWidth: 64, frameHeight: 48 });  //anim course gauche
     this.load.spritesheet('enemyIdle', './src/assets/images/spritesheetArachnobot_Idle.png', { frameWidth: 64, frameHeight: 48 });  //anim passive
 
     // Load body shapes from JSON file generated using PhysicsEditor
