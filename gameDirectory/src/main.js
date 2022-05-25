@@ -42,7 +42,7 @@ const config = { // configuration du phaser avec les propriétés de bases de ph
                 renderFill: false,
                 renderLine: true,
     
-                fillColor: 0x106909,
+                fillColor: 0x106809,
                 fillOpacity: 1,
                 lineColor: 0x28de19,
                 lineOpacity: 1,
@@ -139,7 +139,7 @@ HUD.prototype = {
 
     update: function ()
     {   
-        this.input.keyboard.on('keydown-F1', () => { 
+        this.input.keyboard.on('keydown-F2', () => { 
             console.log('ta bulation'); 
             this.playButton.visible= !this.playButton.visible; 
             this.resumeButton.visible= !this.resumeButton.visible; 
