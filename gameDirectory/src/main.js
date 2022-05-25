@@ -518,11 +518,15 @@ function update(){
         //player.collisionRightWall = false;
         if(!player.collisionLeftWall){
             player.anims.play('run', true).flipX = true; //on joue l'aniamtion run inversée si l'on se dirige vers la gauche
+        }else{
+            player.anims.play('idle',true); 
         }
         player.setVelocityX(-speed_x);
     } else if (keyboard.right.isDown /*&& !player.collisionRightWall*/) {
         if(!player.collisionRightWall){
             player.anims.play('run', true).resetFlip(); //on joue l'aniamtion run non inversée si l'on se dirige vers la droite
+        }else{
+            player.anims.play('idle',true); 
         }
         player.setVelocityX(speed_x);
         //player.collisionLeftWall = false;     
