@@ -142,7 +142,7 @@ HUD.prototype = {
         this.input.keyboard.on('keydown-F2', () => { 
             console.log('ta bulation'); 
             this.playButton.visible= !this.playButton.visible; 
-            this.resumeButton.visible= !this.resumeButton.visible; 
+            this.resumeButton.visible= !this.resumeButton.visible;
         });
 
         //changements de texture au survol des boutons
